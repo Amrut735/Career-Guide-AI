@@ -4,11 +4,14 @@ CareerGuideAI Web Application
 A modern, responsive web interface for the career guidance system.
 """
 
-from flask import Flask, render_template, request, jsonify, session, redirect
+from flask import Flask, render_template, request, jsonify, session, redirect, send_file
 import json
 import os
 from datetime import datetime
 from career_guide_ai import CareerGuideAI
+import io
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 app = Flask(__name__)
 app.secret_key = 'career_guide_ai_secret_key_2024'
@@ -83,22 +86,25 @@ def download(format):
     user_name = session.get('user_profile', {}).get('name', 'user')
     name_suffix = f"_{user_name.replace(' ', '_')}" if user_name else ""
     
-    if format == 'txt':
-        filename = f"career_guidance{name_suffix}_{timestamp}.txt"
-        content = session['guidance_text']
-        mimetype = 'text/plain'
-    elif format == 'json':
-        filename = f"career_guidance{name_suffix}_{timestamp}.json"
-        content = json.dumps(session['json_output'], indent=2)
-        mimetype = 'application/json'
+    if format == 'pdf':
+        filename = f"career_guidance{name_suffix}_{timestamp}.pdf"
+        # Create PDF in memory
+        pdf_buffer = io.BytesIO()
+        pdf = canvas.Canvas(pdf_buffer, pagesize=letter)
+        textobject = pdf.beginText(40, 750)
+        for line in session['guidance_text'].split('\n'):
+            textobject.textLine(line)
+        pdf.drawText(textobject)
+        pdf.save()
+        pdf_buffer.seek(0)
+        return send_file(
+            pdf_buffer,
+            as_attachment=True,
+            download_name=filename,
+            mimetype='application/pdf'
+        )
     else:
         return jsonify({'error': 'Invalid format'}), 400
-    
-    return app.response_class(
-        content,
-        mimetype=mimetype,
-        headers={'Content-Disposition': f'attachment; filename={filename}'}
-    )
 
 @app.route('/api/career-tracks')
 def get_career_tracks():
