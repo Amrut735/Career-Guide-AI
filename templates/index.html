@@ -204,6 +204,47 @@
         </div>
     </div>
 </div>
+<!-- Features Section End -->
+
+<!-- About Section -->
+<div class="row mt-5">
+    <div class="col-12">
+        <h3 class="text-center mb-4">About CareerGuideAI</h3>
+        <div class="card mx-auto" style="max-width: 800px;">
+            <div class="card-body">
+                <p>
+                    <strong>CareerGuideAI</strong> is an advanced AI-powered platform designed to help individuals make informed career decisions. By analyzing your education, experience, skills, and interests, our system provides personalized career recommendations, skill gap analysis, and learning roadmaps tailored to your goals. Stay ahead of the curve with insights into future skill trends and emerging opportunities.
+                </p>
+                <p>
+                    Whether you're a student, a professional looking to switch fields, or someone seeking to upskill, CareerGuideAI is your trusted partner for career growth and lifelong learning.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Info Section -->
+<div class="row mt-5 mb-5">
+    <div class="col-12">
+        <h3 class="text-center mb-4">Contact Us</h3>
+        <div class="card mx-auto" style="max-width: 600px;">
+            <div class="card-body text-center">
+                <p>
+                    <i class="fas fa-envelope me-2"></i>
+                    <a href="mailto:contact@careerguideai.com">contact@careerguideai.com</a>
+                </p>
+                <p>
+                    <i class="fas fa-globe me-2"></i>
+                    <a href="https://career-guide-ai-2.onrender.com" target="_blank">Visit our website</a>
+                </p>
+                <p>
+                    <i class="fas fa-user me-2"></i>
+                    Project by <strong>Amrut735</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
@@ -315,20 +356,25 @@ $(document).ready(function() {
     // Form submission
     $('#careerForm').on('submit', function(e) {
         e.preventDefault();
-        
+        // Validate required fields
+        const name = $('#name').val().trim();
+        const education = $('#education').val();
+        const experience = $('#experience').val();
+        if (!name || !education || !experience || skills.length === 0 || interests.length === 0) {
+            alert('Please fill in all required fields: Name, Education, Experience, at least one Skill, and at least one Interest.');
+            return;
+        }
         const formData = {
-            name: $('#name').val(),
-            education: $('#education').val(),
-            experience: $('#experience').val(),
+            name: name,
+            education: education,
+            experience: experience,
             skills: skills,
             interests: interests,
             learning_style: $('#learningStyle').val()
         };
-
         // Show loading
         $('#loading').addClass('show');
         $('#analyzeBtn').prop('disabled', true);
-
         // Submit analysis
         $.ajax({
             url: '/analyze',
