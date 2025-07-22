@@ -106,6 +106,14 @@ def download(format):
     else:
         return jsonify({'error': 'Invalid format'}), 400
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
 @app.route('/api/career-tracks')
 def get_career_tracks():
     """API endpoint to get available career tracks."""
