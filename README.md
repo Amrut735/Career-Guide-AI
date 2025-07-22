@@ -22,7 +22,7 @@ A comprehensive, professional AI-powered career guidance system that provides pe
 - **Web Application**: Beautiful, responsive web interface with interactive features
 - **Command Line**: Terminal-based interface for quick analysis
 - **API Integration**: JSON output for programmatic use
-- **Download Options**: Save results as TXT or JSON files
+- **Download Options**: Save results as PDF
 
 ## 🏗️ Architecture
 
