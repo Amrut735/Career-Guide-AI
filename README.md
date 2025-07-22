@@ -105,30 +105,6 @@ print(json.dumps(json_output, indent=2))
 - Why Recommended: Strong match with 3 core skills. High High Emerging Demand with 50% growth rate.
 ```
 
-**JSON Output:**
-```json
-{
-  "user_summary": {
-    "name": "John Smith",
-    "education_level": "Bachelor's Degree",
-    "experience_level": "junior",
-    "skills_normalized": ["python", "javascript", "sql", "machine learning"],
-    "interests_normalized": ["ai", "data science", "web development"]
-  },
-  "career_recommendations": [
-    {
-      "career_track": "AI/ML Engineer",
-      "match_score": 85,
-      "current_market_demand_score": 96,
-      "future_demand_projection_score": 99,
-      "why_recommended": "Strong match with 3 core skills. High High Emerging Demand with 50% growth rate.",
-      "top_recommended_skills": ["machine learning", "deep learning", "python", "tensorflow", "pytorch"],
-      "emerging_skills": ["genai", "llm", "mlops", "ai ethics", "federated learning"]
-    }
-  ]
-}
-```
-
 ## 🎯 Supported Career Tracks
 
 The system currently supports 8 high-demand career tracks:
