@@ -4,6 +4,7 @@
 # Web Application Dependencies
 Flask>=2.3.0
 Werkzeug>=2.3.0
+gunicorn
 
 # Optional dependencies for enhanced functionality (uncomment if needed):
 # requests>=2.28.0  # For API integrations
