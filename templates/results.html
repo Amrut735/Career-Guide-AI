@@ -1,0 +1,597 @@
+{% extends "base.html" %}
+
+{% block title %}CareerGuideAI - Your Career Analysis Results{% endblock %}
+
+{% block content %}
+<!-- Results Header -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center">
+                <h2 class="gradient-text mb-3">
+                    <i class="fas fa-chart-line me-2"></i>
+                    Your Career Analysis Results
+                </h2>
+                <p class="lead">Discover your personalized career path and future opportunities</p>
+                <div class="btn-group" role="group">
+                    <a href="/download/txt" class="btn btn-outline-primary">
+                        <i class="fas fa-download me-2"></i>Download Report (TXT)
+                    </a>
+                    <a href="/download/json" class="btn btn-outline-primary">
+                        <i class="fas fa-code me-2"></i>Download Data (JSON)
+                    </a>
+                    <a href="/" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>New Analysis
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- User Profile Summary -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-user me-2"></i>Your Profile Summary</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="feature-icon mx-auto">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <h6>Name</h6>
+                        <p id="userName">Loading...</p>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="feature-icon mx-auto">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h6>Education</h6>
+                        <p id="userEducation">Loading...</p>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="feature-icon mx-auto">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h6>Experience</h6>
+                        <p id="userExperience">Loading...</p>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="feature-icon mx-auto">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h6>Skills Count</h6>
+                        <p id="userSkillsCount">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Career Recommendations -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-star me-2"></i>Top Career Recommendations</h4>
+            </div>
+            <div class="card-body">
+                <div id="careerRecommendations">
+                    <!-- Career recommendations will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Skill Gap Analysis -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h4><i class="fas fa-check-circle me-2"></i>Skills You Have</h4>
+            </div>
+            <div class="card-body">
+                <div id="haveSkills">
+                    <!-- Skills you have will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h4><i class="fas fa-plus-circle me-2"></i>Skills to Learn</h4>
+            </div>
+            <div class="card-body">
+                <div id="needSkills">
+                    <!-- Skills you need will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Learning Roadmap -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-road me-2"></i>Learning Roadmap</h4>
+            </div>
+            <div class="card-body">
+                <div id="learningRoadmap">
+                    <!-- Learning roadmap will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Resume Boosters -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h4><i class="fas fa-lightbulb me-2"></i>Project Ideas</h4>
+            </div>
+            <div class="card-body">
+                <div id="projectIdeas">
+                    <!-- Project ideas will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h4><i class="fas fa-file-alt me-2"></i>Resume Bullets</h4>
+            </div>
+            <div class="card-body">
+                <div id="resumeBullets">
+                    <!-- Resume bullets will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Emerging Trends -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-crystal-ball me-2"></i>Emerging Trends & Future Skills</h4>
+            </div>
+            <div class="card-body">
+                <div id="emergingTrends">
+                    <!-- Emerging trends will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Load results from session
+    loadResults();
+});
+
+function loadResults() {
+    // Get results from the server
+    $.get('/api/results', function(data) {
+        if (data.success) {
+            displayResults(data.results);
+        } else {
+            alert('Error loading results. Please try again.');
+            window.location.href = '/';
+        }
+    }).fail(function() {
+        // Fallback: try to get from session storage or redirect
+        window.location.href = '/';
+    });
+}
+
+function displayResults(results) {
+    // Display user profile
+    $('#userName').text(results.user_summary.name || 'Not specified');
+    $('#userEducation').text(results.user_summary.education_level || 'Not specified');
+    $('#userExperience').text(results.user_summary.experience_level || 'Not specified');
+    $('#userSkillsCount').text(results.user_summary.skills_normalized.length);
+
+    // Display career recommendations
+    displayCareerRecommendations(results.career_recommendations);
+
+    // Display skill gaps
+    if (results.skill_gap_analysis.length > 0) {
+        const gap = results.skill_gap_analysis[0];
+        displaySkills('#haveSkills', gap.have_skills, 'success');
+        displaySkills('#needSkills', gap.need_skills, 'warning');
+    }
+
+    // Display learning roadmap
+    if (results.learning_path.length > 0) {
+        displayLearningRoadmap(results.learning_path[0]);
+    }
+
+    // Display resume boosters
+    if (results.resume_boosters.length > 0) {
+        const booster = results.resume_boosters[0];
+        displayList('#projectIdeas', booster.project_ideas, 'lightbulb');
+        displayList('#resumeBullets', booster.resume_bullets_sample, 'file-alt');
+    }
+
+    // Display emerging trends
+    if (results.career_recommendations.length > 0) {
+        displayEmergingTrends(results.career_recommendations[0].emerging_skills);
+    }
+}
+
+function displayCareerRecommendations(recommendations) {
+    const container = $('#careerRecommendations');
+    container.empty();
+
+    recommendations.forEach((rec, index) => {
+        const demandClass = rec.current_market_demand_score >= 90 ? 'success' : 
+                           rec.current_market_demand_score >= 80 ? 'warning' : 'info';
+        
+        container.append(`
+            <div class="career-card card mb-3 fade-in" style="animation-delay: ${index * 0.1}s">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5 class="card-title">
+                                <span class="badge bg-primary me-2">#${index + 1}</span>
+                                ${rec.career_track}
+                            </h5>
+                            <p class="card-text text-muted">${rec.why_recommended}</p>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <small class="text-muted">Match Score</small>
+                                    <div class="progress mb-2">
+                                        <div class="progress-bar bg-success" style="width: ${rec.match_score}%"></div>
+                                    </div>
+                                    <strong>${rec.match_score}/100</strong>
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="text-muted">Market Demand</small>
+                                    <div class="progress mb-2">
+                                        <div class="progress-bar bg-${demandClass}" style="width: ${rec.current_market_demand_score}%"></div>
+                                    </div>
+                                    <strong>${rec.current_market_demand_score}/100</strong>
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="text-muted">Future Demand</small>
+                                    <div class="progress mb-2">
+                                        <div class="progress-bar bg-info" style="width: ${rec.future_demand_projection_score}%"></div>
+                                    </div>
+                                    <strong>${rec.future_demand_projection_score}/100</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h6>Top Skills:</h6>
+                            ${rec.top_recommended_skills.map(skill => 
+                                `<span class="skill-tag">${skill}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+    });
+}
+
+function displaySkills(containerId, skills, badgeClass) {
+    const container = $(containerId);
+    container.empty();
+    
+    if (skills.length === 0) {
+        container.append('<p class="text-muted">No skills found</p>');
+        return;
+    }
+    
+    skills.forEach(skill => {
+        container.append(`
+            <span class="skill-tag">
+                <i class="fas fa-check me-1"></i>${skill}
+            </span>
+        `);
+    });
+}
+
+function displayLearningRoadmap(roadmap) {
+    const container = $('#learningRoadmap');
+    container.empty();
+    
+    container.append(`
+        <div class="text-center mb-4">
+            <h5>Timeline: ${roadmap.timeline_months} months</h5>
+        </div>
+    `);
+    
+    roadmap.phases.forEach((phase, index) => {
+        container.append(`
+            <div class="card mb-3 fade-in" style="animation-delay: ${index * 0.2}s">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <span class="badge bg-primary me-2">Phase ${index + 1}</span>
+                        ${phase.phase_name} (${phase.duration_weeks} weeks)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h6><i class="fas fa-tools me-2"></i>Focus Skills:</h6>
+                            ${phase.focus_skills.map(skill => 
+                                `<span class="skill-tag">${skill}</span>`
+                            ).join('')}
+                        </div>
+                        <div class="col-md-4">
+                            <h6><i class="fas fa-project-diagram me-2"></i>Projects:</h6>
+                            <ul class="list-unstyled">
+                                ${phase.recommended_projects.map(project => 
+                                    `<li><i class="fas fa-arrow-right me-2"></i>${project}</li>`
+                                ).join('')}
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h6><i class="fas fa-certificate me-2"></i>Certifications:</h6>
+                            <ul class="list-unstyled">
+                                ${phase.recommended_certifications.map(cert => 
+                                    `<li><i class="fas fa-arrow-right me-2"></i>${cert}</li>`
+                                ).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+    });
+}
+
+function displayList(containerId, items, icon) {
+    const container = $(containerId);
+    container.empty();
+    
+    if (items.length === 0) {
+        container.append('<p class="text-muted">No items found</p>');
+        return;
+    }
+    
+    items.forEach(item => {
+        container.append(`
+            <div class="mb-2">
+                <i class="fas fa-${icon} me-2 text-primary"></i>
+                ${item}
+            </div>
+        `);
+    });
+}
+
+function displayEmergingTrends(trends) {
+    const container = $('#emergingTrends');
+    container.empty();
+    
+    // Add introduction
+    container.append(`
+        <div class="alert alert-info mb-4">
+            <h5><i class="fas fa-info-circle me-2"></i>Emerging Trends & Future Skills</h5>
+            <p class="mb-2">Click on any trend below to learn more about it, including market demand, learning resources, and industry insights.</p>
+        </div>
+    `);
+    
+    // Create trend information database
+    const trendInfo = {
+        'genai': {
+            title: 'Generative AI (GenAI)',
+            description: 'Generative AI refers to AI systems that can create new content, including text, images, audio, and video.',
+            market_demand: 'Very High',
+            growth_rate: 'Explosive',
+            salary_range: '$80,000 - $200,000+',
+            skills: ['Python', 'Machine Learning', 'Deep Learning', 'NLP', 'Computer Vision'],
+            resources: [
+                '<a href="https://platform.openai.com/docs" target="_blank">OpenAI API Documentation</a>',
+                '<a href="https://huggingface.co/learn/course" target="_blank">Hugging Face Transformers Course</a>',
+                '<a href="https://www.coursera.org/specializations/generative-ai" target="_blank">Coursera - Generative AI Specialization</a>',
+                '<a href="https://www.deeplearning.ai/short-courses/" target="_blank">DeepLearning.AI - Generative AI Courses</a>',
+                '<a href="https://www.udemy.com/course/generative-ai/" target="_blank">Udemy - Complete Generative AI Course</a>',
+                '<a href="https://www.edx.org/learn/artificial-intelligence" target="_blank">edX - AI and Machine Learning</a>'
+            ],
+            companies: ['OpenAI', 'Google', 'Microsoft', 'Anthropic', 'Stability AI']
+        },
+        'mlops': {
+            title: 'MLOps (Machine Learning Operations)',
+            description: 'MLOps combines machine learning, DevOps, and data engineering to deploy and maintain ML models in production.',
+            market_demand: 'High',
+            growth_rate: 'Rapid',
+            salary_range: '$90,000 - $180,000',
+            skills: ['Python', 'Docker', 'Kubernetes', 'AWS/Azure', 'MLflow', 'Kubeflow'],
+            resources: [
+                '<a href="https://mlops.community/" target="_blank">MLOps Community</a>',
+                '<a href="https://www.coursera.org/specializations/mlops" target="_blank">Coursera - MLOps Specialization</a>',
+                '<a href="https://aws.amazon.com/training/learn-about/machine-learning/" target="_blank">AWS MLOps Workshop</a>',
+                '<a href="https://cloud.google.com/ai-platform/docs/mlops" target="_blank">Google Cloud MLOps</a>',
+                '<a href="https://www.udemy.com/course/mlops-engineering/" target="_blank">Udemy - MLOps Engineering</a>',
+                '<a href="https://www.pluralsight.com/paths/mlops" target="_blank">Pluralsight - MLOps Path</a>'
+            ],
+            companies: ['Netflix', 'Uber', 'Airbnb', 'Spotify', 'Amazon']
+        },
+        'llm': {
+            title: 'Large Language Models (LLMs)',
+            description: 'LLMs are AI models trained on vast amounts of text data to understand and generate human-like language.',
+            market_demand: 'Very High',
+            growth_rate: 'Explosive',
+            salary_range: '$100,000 - $250,000+',
+            skills: ['Python', 'PyTorch', 'Transformers', 'NLP', 'Prompt Engineering'],
+            resources: [
+                '<a href="https://huggingface.co/learn/course" target="_blank">Hugging Face Course</a>',
+                '<a href="https://web.stanford.edu/class/cs224n/" target="_blank">Stanford CS224N - NLP</a>',
+                '<a href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank">OpenAI Prompt Engineering</a>',
+                '<a href="https://python.langchain.com/docs/get_started/introduction" target="_blank">LangChain Documentation</a>',
+                '<a href="https://www.coursera.org/learn/large-language-models" target="_blank">Coursera - LLM Course</a>',
+                '<a href="https://www.udemy.com/course/large-language-models/" target="_blank">Udemy - LLM Masterclass</a>'
+            ],
+            companies: ['OpenAI', 'Google', 'Anthropic', 'Meta', 'Microsoft']
+        },
+        'vectordatabases': {
+            title: 'Vector Databases',
+            description: 'Vector databases store and search high-dimensional vector embeddings for AI applications like similarity search.',
+            market_demand: 'High',
+            growth_rate: 'Rapid',
+            salary_range: '$85,000 - $170,000',
+            skills: ['Python', 'Vector Search', 'Embeddings', 'Database Design', 'AI/ML'],
+            resources: [
+                '<a href="https://docs.pinecone.io/" target="_blank">Pinecone Documentation</a>',
+                '<a href="https://weaviate.io/developers/weaviate" target="_blank">Weaviate Tutorials</a>',
+                '<a href="https://qdrant.tech/documentation/" target="_blank">Qdrant Documentation</a>',
+                '<a href="https://docs.trychroma.com/" target="_blank">Chroma DB Guide</a>',
+                '<a href="https://www.udemy.com/course/vector-databases/" target="_blank">Udemy - Vector Databases</a>',
+                '<a href="https://www.coursera.org/learn/vector-search" target="_blank">Coursera - Vector Search</a>'
+            ],
+            companies: ['Pinecone', 'Weaviate', 'Qdrant', 'Chroma', 'Milvus']
+        },
+        'aiethics': {
+            title: 'AI Ethics & Responsible AI',
+            description: 'AI Ethics focuses on ensuring AI systems are fair, transparent, accountable, and beneficial to society.',
+            market_demand: 'Growing',
+            growth_rate: 'Steady',
+            salary_range: '$70,000 - $150,000',
+            skills: ['Ethics', 'Fairness', 'Transparency', 'Policy', 'AI/ML'],
+            resources: [
+                '<a href="https://www.microsoft.com/en-us/ai/responsible-ai" target="_blank">Microsoft Responsible AI</a>',
+                '<a href="https://ai.google/responsibility/" target="_blank">Google AI Ethics</a>',
+                '<a href="https://www.ibm.com/artificial-intelligence/ethics" target="_blank">IBM AI Ethics</a>',
+                '<a href="https://www.coursera.org/learn/ai-ethics" target="_blank">Coursera - AI Ethics</a>',
+                '<a href="https://www.edx.org/learn/artificial-intelligence-ethics" target="_blank">edX - AI Ethics Course</a>',
+                '<a href="https://www.udemy.com/course/ai-ethics/" target="_blank">Udemy - AI Ethics & Governance</a>'
+            ],
+            companies: ['Microsoft', 'Google', 'IBM', 'Accenture', 'Deloitte']
+        }
+    };
+    
+    // Display trends with toggles
+    trends.forEach((trend, index) => {
+        const trendKey = trend.toLowerCase().replace(/\s+/g, '');
+        const info = trendInfo[trendKey] || {
+            title: trend,
+            description: 'This is an emerging trend in the technology industry.',
+            market_demand: 'High',
+            growth_rate: 'Growing',
+            salary_range: '$70,000 - $150,000',
+            skills: ['Relevant technical skills'],
+            resources: ['Industry resources and courses'],
+            companies: ['Leading companies in this field']
+        };
+        
+        container.append(`
+            <div class="card mb-3 fade-in" style="animation-delay: ${index * 0.1}s">
+                <div class="card-header" style="cursor: pointer;" onclick="toggleTrendInfo('trend-${index}')">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">
+                            <i class="fas fa-rocket me-2"></i>${info.title}
+                        </h6>
+                        <i class="fas fa-chevron-down" id="icon-${index}"></i>
+                    </div>
+                </div>
+                <div class="card-body collapse" id="trend-${index}">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p class="text-muted">${info.description}</p>
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <strong>Market Demand:</strong><br>
+                                    <span class="badge bg-success">${info.market_demand}</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Growth Rate:</strong><br>
+                                    <span class="badge bg-info">${info.growth_rate}</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Salary Range:</strong><br>
+                                    <span class="badge bg-warning">${info.salary_range}</span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Key Skills:</strong><br>
+                                ${info.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h6><i class="fas fa-graduation-cap me-2"></i>Learning Resources:</h6>
+                            <ul class="list-unstyled">
+                                ${info.resources.map(resource => 
+                                    `<li><i class="fas fa-arrow-right me-2"></i>${resource}</li>`
+                                ).join('')}
+                            </ul>
+                            <h6 class="mt-3"><i class="fas fa-building me-2"></i>Leading Companies:</h6>
+                            <ul class="list-unstyled">
+                                ${info.companies.map(company => 
+                                    `<li><i class="fas fa-arrow-right me-2"></i>${company}</li>`
+                                ).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+    });
+    
+    // Add general sources section
+    container.append(`
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5><i class="fas fa-book me-2"></i>Additional Learning Resources</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-graduation-cap me-2"></i>Online Learning Platforms:</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-external-link-alt me-2"></i><a href="https://www.coursera.org" target="_blank">Coursera - University Courses</a></li>
+                            <li><i class="fas fa-external-link-alt me-2"></i><a href="https://www.edx.org" target="_blank">edX - Free University Courses</a></li>
+                            <li><i class="fas fa-external-link-alt me-2"></i><a href="https://www.udemy.com" target="_blank">Udemy - Skill Development</a></li>
+                            <li><i class="fas fa-external-link-alt me-2"></i><a href="https://www.pluralsight.com" target="_blank">Pluralsight - Tech Skills</a></li>
+                            <li><i class="fas fa-external-link-alt me-2"></i><a href="https://www.datacamp.com" target="_blank">DataCamp - Data Science</a></li>
+                            <li><i class="fas fa-external-link-alt me-2"></i><a href="https://www.freecodecamp.org" target="_blank">freeCodeCamp - Free Programming</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-newspaper me-2"></i>Industry Resources:</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-external-link-alt me-2"></i><a href="https://huggingface.co" target="_blank">Hugging Face - AI Models</a></li>
+                            <li><i class="fas fa-external-link-alt me-2"></i><a href="https://paperswithcode.com" target="_blank">Papers With Code</a></li>
+                            <li><i class="fas fa-external-link-alt me-2"></i><a href="https://www.kaggle.com" target="_blank">Kaggle - Data Science Community</a></li>
+                            <li><i class="fas fa-external-link-alt me-2"></i><a href="https://github.com/topics/artificial-intelligence" target="_blank">GitHub AI Projects</a></li>
+                            <li><i class="fas fa-external-link-alt me-2"></i><a href="https://www.arxiv.org" target="_blank">arXiv - Research Papers</a></li>
+                            <li><i class="fas fa-external-link-alt me-2"></i><a href="https://www.tensorflow.org" target="_blank">TensorFlow - ML Framework</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `);
+}
+
+function toggleTrendInfo(trendId) {
+    const content = $(`#${trendId}`);
+    const icon = $(`#icon-${trendId.split('-')[1]}`);
+    
+    content.collapse('toggle');
+    
+    // Rotate icon
+    if (content.hasClass('show')) {
+        icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+    } else {
+        icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+    }
+}
+</script>
+{% endblock %} 

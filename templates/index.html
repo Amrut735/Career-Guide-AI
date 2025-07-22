@@ -1,0 +1,374 @@
+{% extends "base.html" %}
+
+{% block title %}CareerGuideAI - Get Your Personalized Career Guidance{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section text-center">
+    <div class="row align-items-center">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="hero-title text-white">
+                🚀 CareerGuideAI
+            </h1>
+            <p class="hero-subtitle mb-4">
+                Your advanced AI career counselor and future skill forecaster. 
+                Get personalized career recommendations, skill gap analysis, and learning roadmaps.
+            </p>
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="feature-icon mx-auto">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h6>AI-Powered</h6>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-icon mx-auto">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h6>Future Trends</h6>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-icon mx-auto">
+                        <i class="fas fa-road"></i>
+                    </div>
+                    <h6>Learning Paths</h6>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-icon mx-auto">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h6>Certifications</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Career Guidance Form -->
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body p-4">
+                <h3 class="card-title text-center mb-4">
+                    <i class="fas fa-user-graduate me-2"></i>
+                    Your Career Profile
+                </h3>
+                
+                <form id="careerForm">
+                    <!-- Basic Information -->
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">
+                                <i class="fas fa-user me-2"></i>Full Name
+                            </label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your full name">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="education" class="form-label">
+                                <i class="fas fa-graduation-cap me-2"></i>Education Level
+                            </label>
+                            <select class="form-select" id="education" name="education">
+                                <option value="">Select education level</option>
+                                <option value="High School">High School</option>
+                                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                                <option value="Master's Degree">Master's Degree</option>
+                                <option value="PhD">PhD</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Experience Level -->
+                    <div class="mb-4">
+                        <label for="experience" class="form-label">
+                            <i class="fas fa-briefcase me-2"></i>Experience Level
+                        </label>
+                        <select class="form-select" id="experience" name="experience">
+                            <option value="">Select experience level</option>
+                            <option value="student">Student</option>
+                            <option value="fresher">Fresher (0-1 years)</option>
+                            <option value="junior">Junior (1-3 years)</option>
+                            <option value="mid">Mid-level (3-5 years)</option>
+                            <option value="senior">Senior (5+ years)</option>
+                        </select>
+                    </div>
+
+                    <!-- Skills Section -->
+                    <div class="mb-4">
+                        <label class="form-label">
+                            <i class="fas fa-tools me-2"></i>Skills
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="skillInput" placeholder="Type a skill and press Enter">
+                            <button class="btn btn-outline-secondary" type="button" id="addSkill">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="form-text">Press Enter or click + to add skills</div>
+                        <div id="skillsContainer" class="mt-3">
+                            <!-- Skills will be added here -->
+                        </div>
+                        <div id="skillSuggestions" class="mt-2">
+                            <!-- Skill suggestions will appear here -->
+                        </div>
+                    </div>
+
+                    <!-- Interests Section -->
+                    <div class="mb-4">
+                        <label class="form-label">
+                            <i class="fas fa-heart me-2"></i>Interests
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="interestInput" placeholder="Type an interest and press Enter">
+                            <button class="btn btn-outline-secondary" type="button" id="addInterest">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="form-text">Press Enter or click + to add interests</div>
+                        <div id="interestsContainer" class="mt-3">
+                            <!-- Interests will be added here -->
+                        </div>
+                    </div>
+
+                    <!-- Learning Style -->
+                    <div class="mb-4">
+                        <label for="learningStyle" class="form-label">
+                            <i class="fas fa-book-open me-2"></i>Learning Style (Optional)
+                        </label>
+                        <select class="form-select" id="learningStyle" name="learningStyle">
+                            <option value="">Select learning style</option>
+                            <option value="visual">Visual Learner</option>
+                            <option value="auditory">Auditory Learner</option>
+                            <option value="kinesthetic">Kinesthetic Learner</option>
+                            <option value="reading">Reading/Writing Learner</option>
+                        </select>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg" id="analyzeBtn">
+                            <i class="fas fa-magic me-2"></i>
+                            Analyze My Career Path
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Loading Spinner -->
+                <div class="loading text-center mt-4" id="loading">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3">Analyzing your profile and generating recommendations...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="row mt-5">
+    <div class="col-12">
+        <h3 class="text-center mb-4">Why Choose CareerGuideAI?</h3>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h5>AI-Powered Analysis</h5>
+                <p>Advanced algorithms analyze your skills, interests, and market trends to provide personalized recommendations.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-crystal-ball"></i>
+                </div>
+                <h5>Future Skill Prediction</h5>
+                <p>Stay ahead with predictions of emerging skills and technologies that will be in high demand.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-map-marked-alt"></i>
+                </div>
+                <h5>Personalized Roadmap</h5>
+                <p>Get a detailed learning path with phases, projects, and certifications tailored to your goals.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    let skills = [];
+    let interests = [];
+    let availableSkills = [];
+
+    // Load available skills for autocomplete
+    $.get('/api/skills', function(data) {
+        availableSkills = data;
+    });
+
+    // Add skill functionality
+    function addSkill(skill) {
+        if (skill && !skills.includes(skill)) {
+            skills.push(skill);
+            updateSkillsDisplay();
+            $('#skillInput').val('');
+        }
+    }
+
+    function updateSkillsDisplay() {
+        const container = $('#skillsContainer');
+        container.empty();
+        skills.forEach(skill => {
+            container.append(`
+                <span class="skill-tag">
+                    ${skill}
+                    <i class="fas fa-times ms-2" onclick="removeSkill('${skill}')"></i>
+                </span>
+            `);
+        });
+    }
+
+    // Add interest functionality
+    function addInterest(interest) {
+        if (interest && !interests.includes(interest)) {
+            interests.push(interest);
+            updateInterestsDisplay();
+            $('#interestInput').val('');
+        }
+    }
+
+    function updateInterestsDisplay() {
+        const container = $('#interestsContainer');
+        container.empty();
+        interests.forEach(interest => {
+            container.append(`
+                <span class="skill-tag">
+                    ${interest}
+                    <i class="fas fa-times ms-2" onclick="removeInterest('${interest}')"></i>
+                </span>
+            `);
+        });
+    }
+
+    // Skill input handling
+    $('#skillInput').on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            addSkill($(this).val().trim());
+        }
+    });
+
+    $('#addSkill').on('click', function() {
+        addSkill($('#skillInput').val().trim());
+    });
+
+    // Interest input handling
+    $('#interestInput').on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            addInterest($(this).val().trim());
+        }
+    });
+
+    $('#addInterest').on('click', function() {
+        addInterest($('#interestInput').val().trim());
+    });
+
+    // Skill autocomplete
+    $('#skillInput').on('input', function() {
+        const query = $(this).val().toLowerCase();
+        const suggestions = availableSkills.filter(skill => 
+            skill.toLowerCase().includes(query) && query.length > 0
+        ).slice(0, 5);
+        
+        const container = $('#skillSuggestions');
+        container.empty();
+        
+        suggestions.forEach(skill => {
+            container.append(`
+                <span class="badge bg-light text-dark me-2 mb-2 skill-suggestion" style="cursor: pointer;" data-skill="${skill}">
+                    ${skill}
+                </span>
+            `);
+        });
+    });
+
+    // Handle clicking on skill suggestions
+    $(document).on('click', '.skill-suggestion', function() {
+        const skill = $(this).data('skill');
+        addSkill(skill);
+        $('#skillSuggestions').empty(); // Clear suggestions after selection
+    });
+
+    // Form submission
+    $('#careerForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            name: $('#name').val(),
+            education: $('#education').val(),
+            experience: $('#experience').val(),
+            skills: skills,
+            interests: interests,
+            learning_style: $('#learningStyle').val()
+        };
+
+        // Show loading
+        $('#loading').addClass('show');
+        $('#analyzeBtn').prop('disabled', true);
+
+        // Submit analysis
+        $.ajax({
+            url: '/analyze',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                if (response.success) {
+                    // Redirect to results page
+                    window.location.href = '/results';
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Error: ' + error);
+            },
+            complete: function() {
+                $('#loading').removeClass('show');
+                $('#analyzeBtn').prop('disabled', false);
+            }
+        });
+    });
+});
+
+// Global functions for removing skills/interests
+function removeSkill(skill) {
+    const index = skills.indexOf(skill);
+    if (index > -1) {
+        skills.splice(index, 1);
+        updateSkillsDisplay();
+    }
+}
+
+function removeInterest(interest) {
+    const index = interests.indexOf(interest);
+    if (index > -1) {
+        interests.splice(index, 1);
+        updateInterestsDisplay();
+    }
+}
+</script>
+{% endblock %} 

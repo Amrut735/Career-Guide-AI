@@ -1,0 +1,283 @@
+{
+  "user_summary": {
+    "name": "John Smith",
+    "education_level": "Bachelor's Degree",
+    "experience_level": "junior",
+    "skills_normalized": [
+      "python",
+      "machine learning",
+      "basic machine learning",
+      "javascript",
+      "sql",
+      "junior level",
+      "java"
+    ],
+    "interests_normalized": []
+  },
+  "career_recommendations": [
+    {
+      "career_track": "Data Scientist",
+      "match_score": 62,
+      "current_market_demand_score": 95,
+      "future_demand_projection_score": 98,
+      "why_recommended": "Strong match with 3 core skills. High High Emerging Demand with 35% growth rate.",
+      "top_recommended_skills": [
+        "python",
+        "statistics",
+        "machine learning",
+        "sql",
+        "data analysis"
+      ],
+      "emerging_skills": [
+        "genai",
+        "mlops",
+        "llm",
+        "vector databases",
+        "ai ethics"
+      ]
+    },
+    {
+      "career_track": "AI/ML Engineer",
+      "match_score": 42,
+      "current_market_demand_score": 96,
+      "future_demand_projection_score": 99,
+      "why_recommended": "Strong match with 2 core skills. High High Emerging Demand with 50% growth rate.",
+      "top_recommended_skills": [
+        "machine learning",
+        "deep learning",
+        "python",
+        "tensorflow",
+        "pytorch"
+      ],
+      "emerging_skills": [
+        "genai",
+        "llm",
+        "mlops",
+        "ai ethics",
+        "federated learning"
+      ]
+    },
+    {
+      "career_track": "Software Engineer",
+      "match_score": 2,
+      "current_market_demand_score": 90,
+      "future_demand_projection_score": 92,
+      "why_recommended": "Strong match with 0 core skills. High Growing Steadily with 25% growth rate.",
+      "top_recommended_skills": [
+        "programming",
+        "algorithms",
+        "data structures",
+        "version control",
+        "testing"
+      ],
+      "emerging_skills": [
+        "cloud native",
+        "microservices",
+        "devops",
+        "kubernetes",
+        "serverless"
+      ]
+    },
+    {
+      "career_track": "DevOps Engineer",
+      "match_score": 2,
+      "current_market_demand_score": 88,
+      "future_demand_projection_score": 95,
+      "why_recommended": "Strong match with 0 core skills. High High Emerging Demand with 40% growth rate.",
+      "top_recommended_skills": [
+        "linux",
+        "docker",
+        "kubernetes",
+        "ci/cd",
+        "cloud platforms"
+      ],
+      "emerging_skills": [
+        "gitops",
+        "observability",
+        "platform engineering",
+        "security",
+        "aiops"
+      ]
+    },
+    {
+      "career_track": "Product Manager",
+      "match_score": 2,
+      "current_market_demand_score": 85,
+      "future_demand_projection_score": 88,
+      "why_recommended": "Strong match with 0 core skills. High Growing Steadily with 20% growth rate.",
+      "top_recommended_skills": [
+        "product strategy",
+        "user research",
+        "data analysis",
+        "stakeholder management",
+        "agile"
+      ],
+      "emerging_skills": [
+        "ai product management",
+        "data-driven decisions",
+        "customer success",
+        "growth hacking"
+      ]
+    }
+  ],
+  "skill_gap_analysis": [
+    {
+      "career_track": "Data Scientist",
+      "have_skills": [
+        "python",
+        "machine learning",
+        "sql"
+      ],
+      "need_skills": [
+        "statistics",
+        "data analysis"
+      ],
+      "priority_gaps": [
+        "statistics",
+        "data analysis"
+      ]
+    }
+  ],
+  "learning_path": [
+    {
+      "career_track": "Data Scientist",
+      "timeline_months": 12,
+      "phases": [
+        {
+          "phase_name": "Foundation",
+          "duration_weeks": 6,
+          "focus_skills": [
+            "statistics"
+          ],
+          "recommended_projects": [
+            "Build a basic statistics application",
+            "Create a portfolio website",
+            "Complete beginner tutorials and exercises"
+          ],
+          "recommended_certifications": [
+            "Introduction to Data Scientist certification",
+            "Basic programming certification"
+          ],
+          "practice_resources": [
+            {
+              "title": "Coursera Specializations",
+              "provider": "Coursera",
+              "url_placeholder": "coursera.org"
+            },
+            {
+              "title": "Udemy Best Sellers",
+              "provider": "Udemy",
+              "url_placeholder": "udemy.com"
+            },
+            {
+              "title": "LeetCode Problems",
+              "provider": "LeetCode",
+              "url_placeholder": "leetcode.com"
+            }
+          ]
+        },
+        {
+          "phase_name": "Advanced",
+          "duration_weeks": 10,
+          "focus_skills": [
+            "sql",
+            "data analysis",
+            "genai",
+            "mlops"
+          ],
+          "recommended_projects": [
+            "Develop a full-stack data scientist project",
+            "Contribute to open-source projects",
+            "Build a real-world application"
+          ],
+          "recommended_certifications": [
+            "Advanced Data Scientist certification",
+            "Industry-recognized certification"
+          ],
+          "practice_resources": [
+            {
+              "title": "edX MicroMasters",
+              "provider": "edX",
+              "url_placeholder": "edx.org"
+            },
+            {
+              "title": "DataCamp Tracks",
+              "provider": "DataCamp",
+              "url_placeholder": "datacamp.com"
+            },
+            {
+              "title": "Industry Standard Books",
+              "provider": "Various Publishers",
+              "url_placeholder": "amazon.com"
+            },
+            {
+              "title": "O'Reilly Learning",
+              "provider": "O'Reilly",
+              "url_placeholder": "oreilly.com"
+            }
+          ]
+        },
+        {
+          "phase_name": "Specialization",
+          "duration_weeks": 8,
+          "focus_skills": [
+            "genai",
+            "mlops",
+            "llm",
+            "vector databases",
+            "ai ethics"
+          ],
+          "recommended_projects": [
+            "Build an AI-powered application",
+            "Create a cloud-native solution",
+            "Develop a security-focused project"
+          ],
+          "recommended_certifications": [
+            "Specialized certification in emerging technologies",
+            "Cloud platform certification"
+          ],
+          "practice_resources": [
+            {
+              "title": "Kaggle Competitions",
+              "provider": "Kaggle",
+              "url_placeholder": "kaggle.com"
+            },
+            {
+              "title": "GitHub Projects",
+              "provider": "GitHub",
+              "url_placeholder": "github.com"
+            },
+            {
+              "title": "Coursera Specializations",
+              "provider": "Coursera",
+              "url_placeholder": "coursera.org"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "resume_boosters": [
+    {
+      "career_track": "Data Scientist",
+      "project_ideas": [
+        "Developed a data scientist solution using modern technologies",
+        "Built an automated system for data scientist tasks",
+        "Created a data-driven data scientist application",
+        "Implemented best practices in data scientist development"
+      ],
+      "resume_bullets_sample": [
+        "Led data scientist initiatives resulting in 25% efficiency improvement",
+        "Developed scalable solutions using python, statistics, machine learning",
+        "Collaborated with cross-functional teams to deliver high-impact projects",
+        "Stayed current with emerging technologies including genai, mlops"
+      ]
+    }
+  ],
+  "clarifications_needed": [],
+  "meta": {
+    "version": "1.0",
+    "model_notes": "CareerGuideAI - Advanced career counseling system with future skill prediction",
+    "confidence_notes": "Recommendations based on current market trends and projected growth rates"
+  }
+}
