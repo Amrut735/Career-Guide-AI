@@ -100,7 +100,7 @@ def download(format):
 def generate_pdf_report(filename):
     """Generate a comprehensive PDF career guidance report."""
     # Create PDF buffer
-    pdf_buffer = io.BytesIO()
+        pdf_buffer = io.BytesIO()
     doc = SimpleDocTemplate(pdf_buffer, pagesize=A4, rightMargin=72, leftMargin=72, topMargin=72, bottomMargin=72)
     
     # Get styles
@@ -294,14 +294,14 @@ def generate_pdf_report(filename):
     
     # Build PDF
     doc.build(story)
-    pdf_buffer.seek(0)
+        pdf_buffer.seek(0)
     
-    return send_file(
-        pdf_buffer,
-        as_attachment=True,
-        download_name=filename,
-        mimetype='application/pdf'
-    )
+        return send_file(
+            pdf_buffer,
+            as_attachment=True,
+            download_name=filename,
+            mimetype='application/pdf'
+        )
 
 @app.route('/about')
 def about():
