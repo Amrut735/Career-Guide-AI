@@ -22,7 +22,7 @@ A comprehensive, professional AI-powered career guidance system that provides pe
 - **Web Application**: Beautiful, responsive web interface with interactive features
 - **Command Line**: Terminal-based interface for quick analysis
 - **API Integration**: JSON output for programmatic use
-- **Download Options**: Save results as PDF
+- **PDF Reports**: Professional downloadable career guidance reports
 
 ## 🏗️ Architecture
 
@@ -184,11 +184,44 @@ learning_path = json_data["learning_path"][0]
 skill_gaps = json_data["skill_gap_analysis"][0]
 ```
 
+## 📄 PDF Report Generation
+
+The web application includes a comprehensive PDF report generation feature:
+
+### Features of the PDF Report:
+- **Professional Layout**: Clean, structured format with proper styling
+- **Complete Analysis**: Includes all sections from the web interface
+- **User Profile Summary**: Personal information and background
+- **Career Recommendations**: Top 3 career matches with detailed scores
+- **Skill Gap Analysis**: Current skills vs. skills to develop
+- **Learning Roadmap**: Structured learning phases with timelines
+- **Resume Enhancement**: Project ideas and resume bullet points
+- **Emerging Trends**: Future skills and industry trends
+
+### How to Download:
+1. Complete your career analysis on the web interface
+2. Navigate to the results page
+3. Click the "Download Report (PDF)" button
+4. The PDF will be automatically generated and downloaded
+
+### PDF Report Structure:
+```
+📋 Career Guidance Report
+├── Title Page (Name, Date, Time)
+├── User Profile Summary (Table format)
+├── Top Career Recommendations (3 best matches)
+├── Skill Gap Analysis (Have vs. Need)
+├── Learning Roadmap (Phases with timelines)
+├── Resume Enhancement (Projects & bullets)
+└── Emerging Trends & Future Skills
+```
+
 ## 🎨 Output Files
 
-The system generates two output files:
+The system generates multiple output formats:
 - `career_guidance.txt` - Human-readable guidance
 - `career_guidance.json` - Structured data for applications
+- `career_guidance_[name]_[timestamp].pdf` - Professional PDF report
 
 ## 🤝 Contributing
 
