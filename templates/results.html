@@ -2,6 +2,100 @@
 
 {% block title %}CareerGuideAI - Your Career Analysis Results{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Mobile-specific optimizations for results page */
+    @media (max-width: 768px) {
+        /* Button group mobile optimization */
+        .btn-group {
+            flex-direction: column;
+            width: 100%;
+        }
+        
+        .btn-group .btn {
+            border-radius: 10px !important;
+            margin-bottom: 0.5rem;
+            width: 100%;
+        }
+        
+        /* Profile summary mobile */
+        .col-md-3.text-center {
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Card headers mobile */
+        .card-header h4 {
+            font-size: 1.2rem;
+        }
+        
+        /* Progress bars mobile */
+        .progress {
+            height: 12px;
+            border-radius: 6px;
+        }
+        
+        /* Tables mobile */
+        .table-responsive {
+            font-size: 0.85rem;
+        }
+        
+        /* Skill tags mobile */
+        .skill-tag {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            margin: 2px;
+        }
+        
+        /* Career cards mobile */
+        .career-card {
+            margin-bottom: 1rem;
+        }
+        
+        /* Results header mobile */
+        .gradient-text {
+            font-size: 1.8rem !important;
+        }
+        
+        .lead {
+            font-size: 1rem !important;
+        }
+    }
+    
+    /* Extra small devices */
+    @media (max-width: 576px) {
+        .gradient-text {
+            font-size: 1.5rem !important;
+        }
+        
+        .card-header h4 {
+            font-size: 1.1rem;
+        }
+        
+        .feature-icon {
+            width: 45px !important;
+            height: 45px !important;
+            font-size: 1.1rem !important;
+        }
+        
+        .btn {
+            font-size: 0.9rem;
+            padding: 10px 16px;
+        }
+    }
+    
+    /* Touch-friendly interactions for results */
+    @media (hover: none) and (pointer: coarse) {
+        .career-card {
+            cursor: pointer;
+        }
+        
+        .btn {
+            min-height: 44px;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Results Header -->
 <div class="row mb-4">

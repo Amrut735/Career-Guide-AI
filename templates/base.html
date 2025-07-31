@@ -229,13 +229,209 @@
             transform: translateY(-3px);
         }
         
+        /* Mobile Accessibility & Responsive Design */
         @media (max-width: 768px) {
+            /* Hero Section Mobile Optimization */
             .hero-section {
-                padding: 2rem 1rem;
+                padding: 1.5rem 1rem;
+                margin-bottom: 1rem;
+                border-radius: 15px;
             }
             
+            .hero-title {
+                font-size: 2.5rem !important;
+                line-height: 1.2;
+                margin-bottom: 0.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem !important;
+                line-height: 1.4;
+            }
+            
+            /* Card Mobile Optimization */
             .card {
                 margin-bottom: 1rem;
+                border-radius: 12px;
+            }
+            
+            .card-body {
+                padding: 1.5rem 1rem;
+            }
+            
+            /* Form Mobile Optimization */
+            .form-control, .form-select {
+                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 12px 14px;
+                border-radius: 10px;
+            }
+            
+            .form-label {
+                font-size: 0.95rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            /* Button Mobile Optimization */
+            .btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+                border-radius: 10px;
+                min-height: 44px; /* Touch target size */
+            }
+            
+            .btn-lg {
+                padding: 14px 24px;
+                font-size: 1.1rem;
+            }
+            
+            /* Navigation Mobile Optimization */
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            
+            .navbar-nav .nav-link {
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+            }
+            
+            /* Feature Icons Mobile */
+            .feature-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+                margin-bottom: 0.75rem;
+            }
+            
+            /* Skill Tags Mobile */
+            .skill-tag {
+                font-size: 0.8rem;
+                padding: 6px 10px;
+                margin: 3px;
+                border-radius: 15px;
+            }
+            
+            /* Progress Bars Mobile */
+            .progress {
+                height: 10px;
+                border-radius: 5px;
+            }
+            
+            /* Tables Mobile */
+            .table-responsive {
+                font-size: 0.9rem;
+            }
+            
+            /* Spacing Mobile */
+            .py-5 {
+                padding-top: 2rem !important;
+                padding-bottom: 2rem !important;
+            }
+            
+            .mb-4 {
+                margin-bottom: 1.5rem !important;
+            }
+            
+            /* Container Mobile */
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            /* Footer Mobile */
+            footer {
+                text-align: center;
+            }
+            
+            footer .col-md-6 {
+                margin-bottom: 1rem;
+            }
+        }
+        
+        /* Extra Small Mobile Devices */
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 2rem !important;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem !important;
+            }
+            
+            .card-body {
+                padding: 1rem;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .input-group .form-control {
+                border-radius: 10px 10px 0 0;
+                margin-bottom: 0.5rem;
+            }
+            
+            .input-group .btn {
+                border-radius: 0 0 10px 10px;
+                margin-bottom: 0;
+            }
+            
+            /* Feature Grid Mobile */
+            .row.g-3 > div {
+                margin-bottom: 1rem;
+            }
+        }
+        
+        /* Touch Device Optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            /* Larger touch targets */
+            .btn, .form-control, .form-select {
+                min-height: 44px;
+            }
+            
+            /* Disable hover effects on touch devices */
+            .btn-primary:hover {
+                transform: none;
+            }
+            
+            .feature-icon:hover {
+                transform: none;
+            }
+            
+            .skill-tag:hover {
+                transform: none;
+            }
+            
+            .career-card:hover {
+                transform: none;
+            }
+        }
+        
+        /* High Contrast Mode Support */
+        @media (prefers-contrast: high) {
+            .card {
+                border: 2px solid #000;
+            }
+            
+            .btn-primary {
+                border: 2px solid #000;
+            }
+            
+            .form-control, .form-select {
+                border: 2px solid #000;
+            }
+        }
+        
+        /* Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
         }
     </style>
@@ -293,6 +489,117 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Mobile Accessibility Scripts -->
+    <script>
+        // Mobile-specific optimizations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Prevent zoom on input focus (iOS)
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    if (window.innerWidth <= 768) {
+                        this.style.fontSize = '16px';
+                    }
+                });
+            });
+            
+            // Smooth scrolling for mobile with better performance
+            const navLinks = document.querySelectorAll('a[href^="#"]');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        const headerOffset = 80;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        
+                        // Use smooth scrolling with fallback
+                        if ('scrollBehavior' in document.documentElement.style) {
+                            window.scrollTo({
+                                top: offsetPosition,
+                                behavior: 'smooth'
+                            });
+                        } else {
+                            // Fallback for older browsers
+                            window.scrollTo(0, offsetPosition);
+                        }
+                        
+                        // Close mobile menu if open
+                        const navbarCollapse = document.querySelector('.navbar-collapse');
+                        if (navbarCollapse.classList.contains('show')) {
+                            const bsCollapse = new bootstrap.Collapse(navbarCollapse);
+                            bsCollapse.hide();
+                        }
+                    }
+                });
+            });
+            
+            // Touch-friendly form interactions
+            const formElements = document.querySelectorAll('.form-control, .form-select, .btn');
+            formElements.forEach(element => {
+                element.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+                
+                element.addEventListener('touchend', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+            
+            // Optimize scrolling performance on mobile
+            let ticking = false;
+            function updateScroll() {
+                ticking = false;
+                // Add any scroll-based animations here
+            }
+            
+            function requestTick() {
+                if (!ticking) {
+                    requestAnimationFrame(updateScroll);
+                    ticking = true;
+                }
+            }
+            
+            window.addEventListener('scroll', requestTick);
+            
+            // Handle orientation change
+            window.addEventListener('orientationchange', function() {
+                setTimeout(function() {
+                    window.scrollTo(0, 0);
+                }, 100);
+            });
+            
+            // Add loading states for better UX
+            const submitButtons = document.querySelectorAll('button[type="submit"]');
+            submitButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.disabled) return;
+                    
+                    this.disabled = true;
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+                    
+                    // Re-enable after a timeout (fallback)
+                    setTimeout(() => {
+                        this.disabled = false;
+                        this.innerHTML = originalText;
+                    }, 10000);
+                });
+            });
+        });
+        
+        // Viewport meta tag optimization for mobile
+        if (window.innerWidth <= 768) {
+            const viewport = document.querySelector('meta[name="viewport"]');
+            if (viewport) {
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+            }
+        }
+    </script>
     
     {% block extra_js %}{% endblock %}
 </body>

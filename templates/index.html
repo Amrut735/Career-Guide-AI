@@ -2,6 +2,96 @@
 
 {% block title %}CareerGuideAI - Get Your Personalized Career Guidance{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Mobile-specific optimizations for the form */
+    @media (max-width: 768px) {
+        /* Form layout mobile optimization */
+        .row.mb-4 .col-md-6 {
+            margin-bottom: 1rem;
+        }
+        
+        /* Input groups mobile optimization */
+        .input-group {
+            flex-direction: column;
+        }
+        
+        .input-group .form-control {
+            border-radius: 10px 10px 0 0 !important;
+            margin-bottom: 0.5rem;
+        }
+        
+        .input-group .btn {
+            border-radius: 0 0 10px 10px !important;
+            margin-bottom: 0;
+        }
+        
+        /* Skill suggestions mobile */
+        .skill-suggestion {
+            font-size: 0.8rem !important;
+            padding: 8px 12px !important;
+            margin: 2px !important;
+        }
+        
+        /* Loading spinner mobile */
+        .spinner-border {
+            width: 2rem !important;
+            height: 2rem !important;
+        }
+        
+        /* Feature grid mobile */
+        .row.g-3 .col-md-3 {
+            margin-bottom: 1rem;
+        }
+        
+        /* Hero section mobile text */
+        .hero-title {
+            font-size: 2.2rem !important;
+            line-height: 1.1;
+        }
+        
+        .hero-subtitle {
+            font-size: 1rem !important;
+            line-height: 1.3;
+        }
+    }
+    
+    /* Extra small devices */
+    @media (max-width: 576px) {
+        .hero-title {
+            font-size: 1.8rem !important;
+        }
+        
+        .hero-subtitle {
+            font-size: 0.9rem !important;
+        }
+        
+        .card-title {
+            font-size: 1.5rem !important;
+        }
+        
+        .feature-icon {
+            width: 50px !important;
+            height: 50px !important;
+            font-size: 1.2rem !important;
+        }
+    }
+    
+    /* Touch-friendly interactions */
+    @media (hover: none) and (pointer: coarse) {
+        .skill-tag {
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .skill-suggestion {
+            cursor: pointer;
+            user-select: none;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Hero Section -->
 <div class="hero-section text-center">
