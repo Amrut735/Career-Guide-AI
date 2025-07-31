@@ -350,6 +350,19 @@ def get_results():
         'results': session['json_output']
     })
 
+@app.route('/sitemap.xml')
+def sitemap():
+    """Serve sitemap.xml for SEO."""
+    return send_file('static/sitemap.xml', mimetype='application/xml')
+
+@app.route('/robots.txt')
+def robots():
+    """Serve robots.txt for SEO."""
+    robots_content = """User-agent: *
+Allow: /
+Sitemap: https://career-guide-ai.onrender.com/sitemap.xml"""
+    return app.response_class(robots_content, mimetype='text/plain')
+
 if __name__ == '__main__':
     print("🚀 CareerGuideAI Web Application Starting...")
     print("📱 Available at: http://127.0.0.1:5000")
