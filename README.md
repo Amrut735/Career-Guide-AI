@@ -42,14 +42,48 @@ CareerGuideAI/
 
 ## 🚀 Quick Start
 
-### 1. Web Application (Recommended)
+### 1. Local Development
 ```bash
-# Clone or download the files
-python run_web_app.py
+# Clone the repository
+git clone https://github.com/Amrut735/Career-Guide-AI.git
+cd Career-Guide-AI
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the web application
+python app.py
 # The web app will be available at http://localhost:5000
 ```
 
-### 2. Command Line Interface
+### 2. Deploy to the Internet (Make it Public)
+
+**Option A: Google Cloud Platform (Recommended)**
+```bash
+# Follow the detailed guide in DEPLOYMENT_GUIDE.md
+# Quick steps:
+gcloud auth login
+gcloud projects create career-guide-ai-[YOUR-UNIQUE-ID]
+gcloud config set project career-guide-ai-[YOUR-UNIQUE-ID]
+gcloud app deploy
+```
+
+**Option B: Heroku (Free Tier Available)**
+```bash
+# Install Heroku CLI and deploy
+heroku create career-guide-ai
+git push heroku main
+```
+
+**Option C: Railway (Free Tier Available)**
+```bash
+# Install Railway CLI and deploy
+npm install -g @railway/cli
+railway login
+railway up
+```
+
+### 3. Command Line Interface
 ```bash
 # Run the interactive demo
 python examples/interactive_demo.py
@@ -222,6 +256,32 @@ The system generates multiple output formats:
 - `career_guidance.txt` - Human-readable guidance
 - `career_guidance.json` - Structured data for applications
 - `career_guidance_[name]_[timestamp].pdf` - Professional PDF report
+
+## 🌐 Deployment Options
+
+### Google Cloud Platform (Recommended)
+- **Free Tier**: 28 instance hours/day
+- **Cost**: $0-15/month depending on usage
+- **Features**: Auto-scaling, HTTPS, custom domains
+- **Guide**: See `DEPLOYMENT_GUIDE.md` for detailed instructions
+
+### Heroku
+- **Free Tier**: Available (with limitations)
+- **Cost**: $7/month for basic paid plan
+- **Features**: Easy deployment, add-ons ecosystem
+- **Setup**: `heroku create && git push heroku main`
+
+### Railway
+- **Free Tier**: Available
+- **Cost**: $5/month for basic plan
+- **Features**: Modern platform, easy CI/CD
+- **Setup**: `railway login && railway up`
+
+### Render
+- **Free Tier**: Available
+- **Cost**: $7/month for basic plan
+- **Features**: Automatic deployments from GitHub
+- **Setup**: Connect GitHub repository, automatic deployment
 
 ## 🤝 Contributing
 
