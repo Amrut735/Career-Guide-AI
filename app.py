@@ -36,12 +36,33 @@ def analyze():
         # Get form data
         data = request.get_json()
         
+        # Validate required fields
+        if not data:
+            return jsonify({
+                'success': False,
+                'error': 'No data provided'
+            }), 400
+        
+        name = data.get('name', '').strip()
+        if not name:
+            return jsonify({
+                'success': False,
+                'error': 'Name is required'
+            }), 400
+        
+        skills = data.get('skills', [])
+        if not skills:
+            return jsonify({
+                'success': False,
+                'error': 'At least one skill is required'
+            }), 400
+        
         # Format user input
         user_input = f"""
-        Name: {data.get('name', '')}
+        Name: {name}
         Education: {data.get('education', '')}
         Experience: {data.get('experience', '')}
-        Skills: {', '.join(data.get('skills', []))}
+        Skills: {', '.join(skills)}
         Interests: {', '.join(data.get('interests', []))}
         Learning Style: {data.get('learning_style', '')}
         """
@@ -61,19 +82,24 @@ def analyze():
             'interests': user_profile.interests
         }
         
+        # Store analysis timestamp
+        session['analysis_timestamp'] = datetime.now().isoformat()
+        
         print(f"DEBUG: Stored in session - guidance_text: {len(guidance_text) if guidance_text else 0} chars")
         print(f"DEBUG: Session keys after storing: {list(session.keys())}")
         
         return jsonify({
             'success': True,
             'guidance': json_output,
-            'user_profile': session['user_profile']
+            'user_profile': session['user_profile'],
+            'timestamp': session['analysis_timestamp']
         })
         
     except Exception as e:
+        print(f"ERROR in analyze: {str(e)}")
         return jsonify({
             'success': False,
-            'error': str(e)
+            'error': f'Analysis failed: {str(e)}'
         }), 500
 
 @app.route('/results')
@@ -99,13 +125,22 @@ def download(format):
     
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     user_name = session.get('user_profile', {}).get('name', 'user')
-    name_suffix = f"_{user_name.replace(' ', '_')}" if user_name else ""
+    safe_name = "".join(c for c in user_name if c.isalnum() or c in (' ', '-', '_')).rstrip()
+    safe_name = safe_name.replace(' ', '_')
     
     if format.lower() == 'pdf':
-        filename = f"career_guidance{name_suffix}_{timestamp}.pdf"
+        filename = f"career_guidance_{safe_name}_{timestamp}.pdf"
         return generate_pdf_report(filename)
+    elif format.lower() == 'json':
+        filename = f"career_guidance_{safe_name}_{timestamp}.json"
+        return send_file(
+            io.BytesIO(json.dumps(session['json_output'], indent=2).encode()),
+            as_attachment=True,
+            download_name=filename,
+            mimetype='application/json'
+        )
     else:
-        return jsonify({'error': 'Invalid format'}), 400
+        return jsonify({'error': 'Unsupported format'}), 400
 
 def generate_pdf_report(filename):
     """Generate a comprehensive PDF career guidance report."""
@@ -357,7 +392,50 @@ def get_results():
     
     return jsonify({
         'success': True,
-        'results': session['json_output']
+        'results': session['json_output'],
+        'user_profile': session.get('user_profile', {}),
+        'timestamp': session.get('analysis_timestamp', '')
+    })
+
+@app.route('/api/analysis-history')
+def get_analysis_history():
+    """API endpoint to get analysis history."""
+    # For now, return current session data
+    # In a real app, this would query a database
+    if 'json_output' not in session:
+        return jsonify({'history': []})
+    
+    return jsonify({
+        'history': [{
+            'timestamp': session.get('analysis_timestamp', ''),
+            'user_profile': session.get('user_profile', {}),
+            'career_recommendations': len(session['json_output'].get('career_recommendations', [])),
+            'top_career': session['json_output'].get('career_recommendations', [{}])[0].get('career_track', '') if session['json_output'].get('career_recommendations') else ''
+        }]
+    })
+
+@app.route('/api/career-stats')
+def get_career_stats():
+    """API endpoint to get career statistics."""
+    if 'json_output' not in session:
+        return jsonify({'error': 'No analysis data available'}), 404
+    
+    recommendations = session['json_output'].get('career_recommendations', [])
+    if not recommendations:
+        return jsonify({'error': 'No career recommendations available'}), 404
+    
+    # Calculate statistics
+    avg_match_score = sum(r.get('match_score', 0) for r in recommendations) / len(recommendations)
+    avg_market_demand = sum(r.get('current_market_demand_score', 0) for r in recommendations) / len(recommendations)
+    avg_future_demand = sum(r.get('future_demand_projection_score', 0) for r in recommendations) / len(recommendations)
+    
+    return jsonify({
+        'total_recommendations': len(recommendations),
+        'average_match_score': round(avg_match_score, 1),
+        'average_market_demand': round(avg_market_demand, 1),
+        'average_future_demand': round(avg_future_demand, 1),
+        'top_career': recommendations[0].get('career_track', ''),
+        'top_match_score': recommendations[0].get('match_score', 0)
     })
 
 @app.route('/sitemap.xml')
@@ -386,6 +464,34 @@ def debug_session():
         'has_guidance': 'guidance_text' in session,
         'has_json': 'json_output' in session
     })
+
+@app.route('/api/progress')
+def get_progress():
+    """API endpoint to get user progress information."""
+    if 'json_output' not in session:
+        return jsonify({'error': 'No analysis data available'}), 404
+    
+    recommendations = session['json_output'].get('career_recommendations', [])
+    skill_gaps = session['json_output'].get('skill_gap_analysis', [])
+    learning_paths = session['json_output'].get('learning_path', [])
+    
+    # Calculate progress metrics
+    total_skills_needed = sum(len(gap.get('need_skills', [])) for gap in skill_gaps)
+    total_learning_phases = sum(len(path.get('phases', [])) for path in learning_paths)
+    
+    progress_data = {
+        'analysis_completed': True,
+        'analysis_date': session.get('analysis_timestamp', ''),
+        'career_recommendations_count': len(recommendations),
+        'skill_gaps_count': len(skill_gaps),
+        'learning_paths_count': len(learning_paths),
+        'total_skills_to_learn': total_skills_needed,
+        'total_learning_phases': total_learning_phases,
+        'top_career_match': recommendations[0].get('career_track', '') if recommendations else '',
+        'match_score': recommendations[0].get('match_score', 0) if recommendations else 0
+    }
+    
+    return jsonify(progress_data)
 
 if __name__ == '__main__':
     print("🚀 CareerGuideAI Web Application Starting...")

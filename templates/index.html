@@ -612,14 +612,50 @@ $(document).ready(function() {
     // Form submission
     $('#careerForm').on('submit', function(e) {
         e.preventDefault();
-        // Validate required fields
+        
+        // Enhanced validation with better user feedback
         const name = $('#name').val().trim();
         const education = $('#education').val();
         const experience = $('#experience').val();
-        if (!name || !education || !experience || skills.length === 0 || interests.length === 0) {
-            alert('Please fill in all required fields: Name, Education, Experience, at least one Skill, and at least one Interest.');
+        
+        // Clear previous error messages
+        $('.error-message').remove();
+        
+        let hasErrors = false;
+        
+        if (!name) {
+            $('#name').after('<div class="error-message text-danger mt-1">Name is required</div>');
+            hasErrors = true;
+        }
+        
+        if (!education) {
+            $('#education').after('<div class="error-message text-danger mt-1">Education level is required</div>');
+            hasErrors = true;
+        }
+        
+        if (!experience) {
+            $('#experience').after('<div class="error-message text-danger mt-1">Experience level is required</div>');
+            hasErrors = true;
+        }
+        
+        if (skills.length === 0) {
+            $('#skillsContainer').after('<div class="error-message text-danger mt-1">At least one skill is required</div>');
+            hasErrors = true;
+        }
+        
+        if (interests.length === 0) {
+            $('#interestsContainer').after('<div class="error-message text-danger mt-1">At least one interest is required</div>');
+            hasErrors = true;
+        }
+        
+        if (hasErrors) {
+            // Scroll to first error
+            $('html, body').animate({
+                scrollTop: $('.error-message').first().offset().top - 100
+            }, 500);
             return;
         }
+        
         const formData = {
             name: name,
             education: education,
@@ -628,11 +664,14 @@ $(document).ready(function() {
             interests: interests,
             learning_style: $('#learningStyle').val()
         };
-        // Show loading
+        
+        // Show loading with better feedback
         $('#loading').addClass('show');
         $('#analyzeBtn').prop('disabled', true);
-        // Submit analysis
+        $('#analyzeBtn').html('<i class="fas fa-spinner fa-spin me-2"></i>Analyzing...');
+        
         console.log('Submitting form data:', formData);
+        
         $.ajax({
             url: '/analyze',
             method: 'POST',
@@ -643,33 +682,63 @@ $(document).ready(function() {
                 console.log('Response received:', response);
                 if (response.success) {
                     console.log('Success! Redirecting to results page...');
-                    // Store a flag in localStorage to indicate successful analysis
+                    // Store analysis data in localStorage
                     localStorage.setItem('analysis_completed', 'true');
                     localStorage.setItem('analysis_timestamp', Date.now());
+                    localStorage.setItem('analysis_data', JSON.stringify(response));
+                    
+                    // Show success message before redirect
+                    $('#loading').html(`
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Analysis completed successfully! Redirecting to results...
+                        </div>
+                    `);
                     
                     // Simple, reliable redirect
-                    console.log('Initiating redirect to /results...');
-                    window.location.href = '/results';
+                    setTimeout(function() {
+                        window.location.href = '/results';
+                    }, 1500);
                 } else {
                     console.log('Error in response:', response.error);
-                    alert('Error: ' + response.error);
+                    showError('Analysis failed: ' + response.error);
                 }
             },
             error: function(xhr, status, error) {
                 console.log('AJAX error:', xhr, status, error);
+                let errorMessage = 'An error occurred during analysis.';
+                
                 if (status === 'timeout') {
-                    alert('Request timed out. Please try again.');
-                } else {
-                    alert('Error: ' + error);
+                    errorMessage = 'Request timed out. Please try again.';
+                } else if (xhr.responseJSON && xhr.responseJSON.error) {
+                    errorMessage = xhr.responseJSON.error;
+                } else if (error) {
+                    errorMessage = 'Error: ' + error;
                 }
+                
+                showError(errorMessage);
             },
-                        complete: function() {
+            complete: function() {
                 console.log('Request completed');
                 $('#loading').removeClass('show');
                 $('#analyzeBtn').prop('disabled', false);
+                $('#analyzeBtn').html('<i class="fas fa-magic me-2"></i>Analyze My Career Path');
             }
         });
     });
+    
+    // Helper function to show errors
+    function showError(message) {
+        $('#loading').html(`
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                ${message}
+                <button type="button" class="btn btn-outline-danger btn-sm ms-3" onclick="location.reload()">
+                    <i class="fas fa-redo me-1"></i>Try Again
+                </button>
+            </div>
+        `);
+    }
     
     // Simple fallback redirect
     setTimeout(function() {
