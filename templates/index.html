@@ -679,6 +679,17 @@ $(document).ready(function() {
         
         console.log('Form submitted!');
         
+        submitForm();
+    });
+    
+    // Also handle button click as backup
+    $('#analyzeBtn').on('click', function(e) {
+        e.preventDefault();
+        console.log('Button clicked!');
+        submitForm();
+    });
+    
+    function submitForm() {
         // Basic validation
         const name = $('#name').val().trim();
         const education = $('#education').val();
@@ -755,7 +766,7 @@ $(document).ready(function() {
                 $('#analyzeBtn').html('<i class="fas fa-magic me-2"></i>Analyze My Career Path');
             }
         });
-    });
+    }
     
     // Helper function to show errors
     function showError(message) {
@@ -771,13 +782,6 @@ $(document).ready(function() {
         `);
     }
     
-    // Simple fallback redirect check
-    setTimeout(function() {
-        if (localStorage.getItem('analysis_completed') === 'true') {
-            console.log('Fallback: Redirecting to results page...');
-            window.location.href = '/results';
-        }
-    }, 5000);
  });
  
  // Smooth scrolling for navigation links

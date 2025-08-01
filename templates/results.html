@@ -362,36 +362,70 @@
 {% block extra_js %}
 <script>
 $(document).ready(function() {
+    console.log('Results page loaded');
+    
     // Check if analysis was completed recently
     const analysisCompleted = localStorage.getItem('analysis_completed');
     const analysisTimestamp = localStorage.getItem('analysis_timestamp');
+    const analysisData = localStorage.getItem('analysis_data');
     const now = Date.now();
     
-    // Check if analysis was completed within the last 30 minutes
-    if (analysisCompleted && analysisTimestamp && (now - parseInt(analysisTimestamp)) < 30 * 60 * 1000) {
-        console.log('Analysis completed recently, loading results...');
-        loadResults();
+    // Check if analysis was completed within the last 30 minutes AND data exists
+    if (analysisCompleted === 'true' && analysisTimestamp && analysisData && (now - parseInt(analysisTimestamp)) < 30 * 60 * 1000) {
+        console.log('Analysis completed recently, loading results from localStorage...');
+        try {
+            const parsedData = JSON.parse(analysisData);
+            // Ensure user_profile is available for displayResults
+            const combinedResults = {
+                ...parsedData.guidance, // Assuming 'guidance' holds the main results structure
+                user_profile: parsedData.user_profile
+            };
+            displayResults(combinedResults);
+            loadCareerStats();
+        } catch (e) {
+            console.error('Error parsing analysis_data from localStorage:', e);
+            // Clear corrupted data and redirect
+            localStorage.removeItem('analysis_completed');
+            localStorage.removeItem('analysis_timestamp');
+            localStorage.removeItem('analysis_data');
+            window.location.href = '/';
+        }
     } else {
-        console.log('No recent analysis found or analysis expired');
+        console.log('No recent analysis found or analysis expired, checking server...');
         // Clear old localStorage data
         localStorage.removeItem('analysis_completed');
         localStorage.removeItem('analysis_timestamp');
+        localStorage.removeItem('analysis_data');
+        
+        // Try to load from server as fallback
+        loadResults();
     }
 });
 
 function loadResults() {
+    console.log('Loading results from server...');
     // Get results from the server
     $.get('/api/results', function(data) {
+        console.log('API response:', data);
         if (data.success) {
-            displayResults(data.results);
+            // Combine results with user_profile
+            const combinedResults = {
+                ...data.results,
+                user_profile: data.user_profile
+            };
+            displayResults(combinedResults);
             // Load career statistics
             loadCareerStats();
         } else {
-            alert('Error loading results. Please try again.');
+            console.error('API returned error:', data.error);
+            // No valid results found, redirect to home page
+            alert('No analysis results found. Please complete an analysis first.');
             window.location.href = '/';
         }
-    }).fail(function() {
-        // Fallback: try to get from session storage or redirect
+    }).fail(function(xhr, status, error) {
+        console.error('API request failed:', xhr, status, error);
+        // No server data available, redirect to home page
+        alert('No analysis results found. Please complete an analysis first.');
         window.location.href = '/';
     });
 }
@@ -416,11 +450,14 @@ function loadCareerStats() {
 }
 
 function displayResults(results) {
-    // Display user profile
-    $('#userName').text(results.user_summary.name || 'Not specified');
-    $('#userEducation').text(results.user_summary.education_level || 'Not specified');
-    $('#userExperience').text(results.user_summary.experience_level || 'Not specified');
-    $('#userSkillsCount').text(results.user_summary.skills_normalized.length);
+    console.log('Displaying results:', results);
+    
+    // Display user profile - get from user_profile if available
+    const userProfile = results.user_profile || {};
+    $('#userName').text(userProfile.name || 'Not specified');
+    $('#userEducation').text(userProfile.education || 'Not specified');
+    $('#userExperience').text(userProfile.experience || 'Not specified');
+    $('#userSkillsCount').text(userProfile.skills ? userProfile.skills.length : 0);
 
     // Display career recommendations
     displayCareerRecommendations(results.career_recommendations);

@@ -4,7 +4,7 @@ CareerGuideAI Web Application
 A modern, responsive web interface for the career guidance system.
 """
 
-from flask import Flask, render_template, request, jsonify, session, redirect, send_file
+from flask import Flask, render_template, request, jsonify, session, redirect, send_file, url_for
 import json
 import os
 from datetime import datetime
@@ -109,10 +109,10 @@ def results():
     print(f"DEBUG: guidance_text in session: {'guidance_text' in session}")
     print(f"DEBUG: json_output in session: {'json_output' in session}")
     
-    if 'guidance_text' not in session:
-        print("DEBUG: No guidance_text in session, redirecting to home")
-        # Instead of redirecting, show a message asking user to complete analysis first
-        return render_template('results.html', no_data=True)
+    if 'guidance_text' not in session or 'json_output' not in session:
+        print("DEBUG: No analysis data in session, redirecting to home")
+        # Redirect to home page if no analysis data exists
+        return redirect(url_for('index'))
     
     print("DEBUG: Rendering results page")
     return render_template('results.html', no_data=False)
