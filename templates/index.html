@@ -160,11 +160,14 @@
                             <select class="form-select" id="education" name="education">
                                 <option value="">Select education level</option>
                                 <option value="High School">High School</option>
-                                <option value="Bachelor's Degree">Bachelor's Degree</option>
-                                <option value="Master's Degree">Master's Degree</option>
+                                <option value="Bachelor">Bachelor's Degree</option>
+                                <option value="Master">Master's Degree</option>
                                 <option value="PhD">PhD</option>
                                 <option value="Other">Other</option>
                             </select>
+                            <div id="domainSuggestions" class="mt-2">
+                                <!-- Domain suggestions will appear here -->
+                            </div>
                         </div>
                     </div>
 
@@ -495,7 +498,32 @@
 // Global variables for skills and interests
 let skills = [];
 let interests = [];
-let availableSkills = [];
+let availableSkills = [
+    // Programming Languages
+    'Python', 'JavaScript', 'Java', 'C++', 'C#', 'PHP', 'Ruby', 'Go', 'Rust', 'Swift', 'Kotlin', 'TypeScript',
+    // Web Technologies
+    'HTML', 'CSS', 'React', 'Angular', 'Vue.js', 'Node.js', 'Express.js', 'Django', 'Flask', 'Laravel', 'Spring Boot',
+    // Databases
+    'SQL', 'MySQL', 'PostgreSQL', 'MongoDB', 'Redis', 'Oracle', 'SQLite', 'Cassandra',
+    // Cloud & DevOps
+    'AWS', 'Azure', 'Google Cloud', 'Docker', 'Kubernetes', 'Jenkins', 'Git', 'CI/CD', 'Terraform',
+    // Data Science & AI
+    'Machine Learning', 'Deep Learning', 'TensorFlow', 'PyTorch', 'Scikit-learn', 'Pandas', 'NumPy', 'Data Analysis',
+    'Natural Language Processing', 'Computer Vision', 'Big Data', 'Hadoop', 'Spark', 'Tableau', 'Power BI',
+    // Mobile Development
+    'React Native', 'Flutter', 'iOS Development', 'Android Development', 'Xamarin',
+    // Other Technical Skills
+    'Linux', 'Shell Scripting', 'REST APIs', 'GraphQL', 'Microservices', 'Blockchain', 'Cybersecurity',
+    'Network Administration', 'System Administration', 'UI/UX Design', 'Adobe Creative Suite'
+];
+
+let availableDomains = [
+    'Software Development', 'Web Development', 'Mobile Development', 'Data Science', 'Artificial Intelligence',
+    'Machine Learning', 'DevOps', 'Cloud Computing', 'Cybersecurity', 'Network Engineering',
+    'Database Administration', 'System Administration', 'UI/UX Design', 'Digital Marketing',
+    'Business Analysis', 'Project Management', 'Quality Assurance', 'Technical Writing',
+    'Game Development', 'Embedded Systems', 'IoT Development', 'Blockchain Development'
+];
 
 // Global functions for updating displays
 function updateSkillsDisplay() {
@@ -530,6 +558,7 @@ function addSkill(skill) {
         skills.push(skill);
         updateSkillsDisplay();
         $('#skillInput').val('');
+        $('#skillSuggestions').empty();
     }
 }
 
@@ -544,11 +573,6 @@ function addInterest(interest) {
 
 $(document).ready(function() {
 
-    // Load available skills for autocomplete
-    $.get('/api/skills', function(data) {
-        availableSkills = data;
-    });
-
     // Add skill functionality (local wrapper for global function)
     function addSkillLocal(skill) {
         addSkill(skill);
@@ -559,7 +583,7 @@ $(document).ready(function() {
         addInterest(interest);
     }
 
-    // Skill input handling
+    // Skill input handling with enhanced suggestions
     $('#skillInput').on('keypress', function(e) {
         if (e.which === 13) {
             e.preventDefault();
@@ -583,33 +607,73 @@ $(document).ready(function() {
         addInterestLocal($('#interestInput').val().trim());
     });
 
-    // Skill autocomplete
+    // Enhanced skill autocomplete with categories
     $('#skillInput').on('input', function() {
         const query = $(this).val().toLowerCase();
         const suggestions = availableSkills.filter(skill => 
             skill.toLowerCase().includes(query) && query.length > 0
-        ).slice(0, 5);
+        ).slice(0, 8);
         
         const container = $('#skillSuggestions');
         container.empty();
         
-        suggestions.forEach(skill => {
-            container.append(`
-                <span class="badge bg-light text-dark me-2 mb-2 skill-suggestion" style="cursor: pointer;" data-skill="${skill}">
-                    ${skill}
-                </span>
-            `);
-        });
+        if (suggestions.length > 0) {
+            container.append('<div class="mb-2"><small class="text-muted">Quick suggestions:</small></div>');
+            suggestions.forEach(skill => {
+                container.append(`
+                    <span class="badge bg-primary me-2 mb-2 skill-suggestion" style="cursor: pointer;" data-skill="${skill}">
+                        ${skill}
+                    </span>
+                `);
+            });
+        }
+    });
+
+    // Domain suggestions for education field
+    $('#education').on('change', function() {
+        const education = $(this).val();
+        const domainContainer = $('#domainSuggestions');
+        
+        if (education && education !== '') {
+            domainContainer.empty();
+            domainContainer.append('<div class="mb-2"><small class="text-muted">Popular domains for your education level:</small></div>');
+            
+            // Show relevant domains based on education level
+            let relevantDomains = availableDomains;
+            if (education === 'High School') {
+                relevantDomains = ['Web Development', 'Digital Marketing', 'UI/UX Design', 'Cybersecurity', 'Data Analysis'];
+            } else if (education === 'Bachelor') {
+                relevantDomains = ['Software Development', 'Data Science', 'Web Development', 'Mobile Development', 'DevOps'];
+            } else if (education === 'Master') {
+                relevantDomains = ['Artificial Intelligence', 'Machine Learning', 'Data Science', 'Cloud Computing', 'Cybersecurity'];
+            }
+            
+            relevantDomains.slice(0, 6).forEach(domain => {
+                domainContainer.append(`
+                    <span class="badge bg-info me-2 mb-2 domain-suggestion" style="cursor: pointer;" data-domain="${domain}">
+                        ${domain}
+                    </span>
+                `);
+            });
+        }
     });
 
     // Handle clicking on skill suggestions
     $(document).on('click', '.skill-suggestion', function() {
         const skill = $(this).data('skill');
         addSkill(skill);
-        $('#skillSuggestions').empty(); // Clear suggestions after selection
+        $('#skillSuggestions').empty();
     });
 
-    // Form submission
+    // Handle clicking on domain suggestions
+    $(document).on('click', '.domain-suggestion', function() {
+        const domain = $(this).data('domain');
+        // Add domain as an interest
+        addInterest(domain);
+        $('#domainSuggestions').empty();
+    });
+
+    // Form submission with improved error handling
     $('#careerForm').on('submit', function(e) {
         e.preventDefault();
         
@@ -672,16 +736,22 @@ $(document).ready(function() {
         
         console.log('Submitting form data:', formData);
         
+        // Clear any previous localStorage data
+        localStorage.removeItem('analysis_completed');
+        localStorage.removeItem('analysis_timestamp');
+        localStorage.removeItem('analysis_data');
+        
         $.ajax({
             url: '/analyze',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(formData),
-            timeout: 30000, // 30 second timeout
+            timeout: 45000, // 45 second timeout
             success: function(response) {
                 console.log('Response received:', response);
                 if (response.success) {
                     console.log('Success! Redirecting to results page...');
+                    
                     // Store analysis data in localStorage
                     localStorage.setItem('analysis_completed', 'true');
                     localStorage.setItem('analysis_timestamp', Date.now());
@@ -695,10 +765,39 @@ $(document).ready(function() {
                         </div>
                     `);
                     
-                    // Simple, reliable redirect
-                    setTimeout(function() {
-                        window.location.href = '/results';
-                    }, 1500);
+                    // Multiple redirect attempts for reliability
+                    let redirectAttempts = 0;
+                    const maxAttempts = 3;
+                    
+                    function attemptRedirect() {
+                        redirectAttempts++;
+                        console.log(`Redirect attempt ${redirectAttempts}`);
+                        
+                        try {
+                            window.location.href = '/results';
+                        } catch (e) {
+                            console.error('Redirect error:', e);
+                            if (redirectAttempts < maxAttempts) {
+                                setTimeout(attemptRedirect, 1000);
+                            } else {
+                                // Fallback: show manual link
+                                $('#loading').html(`
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        Analysis completed! Click the link below to view results:
+                                        <br><br>
+                                        <a href="/results" class="btn btn-primary">
+                                            <i class="fas fa-chart-bar me-2"></i>View Results
+                                        </a>
+                                    </div>
+                                `);
+                            }
+                        }
+                    }
+                    
+                    // Start redirect process
+                    setTimeout(attemptRedirect, 1500);
+                    
                 } else {
                     console.log('Error in response:', response.error);
                     showError('Analysis failed: ' + response.error);
@@ -740,46 +839,61 @@ $(document).ready(function() {
         `);
     }
     
-    // Simple fallback redirect
-    setTimeout(function() {
+    // Enhanced fallback redirect with multiple attempts
+    let fallbackAttempts = 0;
+    const maxFallbackAttempts = 5;
+    
+    function checkAndRedirect() {
         if (localStorage.getItem('analysis_completed') === 'true') {
             console.log('Fallback: Redirecting to results page...');
-            window.location.href = '/results';
+            try {
+                window.location.href = '/results';
+            } catch (e) {
+                console.error('Fallback redirect error:', e);
+                fallbackAttempts++;
+                if (fallbackAttempts < maxFallbackAttempts) {
+                    setTimeout(checkAndRedirect, 2000);
+                }
+            }
         }
-    }, 2000);
-});
-});
-
-// Smooth scrolling for navigation links
-$(document).ready(function() {
-    $('a[href^="#"]').on('click', function(e) {
-        e.preventDefault();
-        const target = $(this.getAttribute('href'));
-        if (target.length) {
-            $('html, body').animate({
-                scrollTop: target.offset().top - 80
-            }, 800);
-        }
-    });
-});
-
-// Global functions for removing skills/interests
-function removeSkill(skill) {
-    const index = skills.indexOf(skill);
-    if (index > -1) {
-        skills.splice(index, 1);
-        updateSkillsDisplay();
     }
-}
-
-function removeInterest(interest) {
-    const index = interests.indexOf(interest);
-    if (index > -1) {
-        interests.splice(index, 1);
-        updateInterestsDisplay();
-    }
-}
-
-
-</script>
-{% endblock %} 
+    
+         // Check for redirect every 2 seconds for up to 10 seconds
+     setTimeout(checkAndRedirect, 2000);
+     setTimeout(checkAndRedirect, 4000);
+     setTimeout(checkAndRedirect, 6000);
+     setTimeout(checkAndRedirect, 8000);
+     setTimeout(checkAndRedirect, 10000);
+ });
+ 
+ // Smooth scrolling for navigation links
+ $(document).ready(function() {
+     $('a[href^="#"]').on('click', function(e) {
+         e.preventDefault();
+         const target = $(this.getAttribute('href'));
+         if (target.length) {
+             $('html, body').animate({
+                 scrollTop: target.offset().top - 80
+             }, 800);
+         }
+     });
+ });
+ 
+ // Global functions for removing skills/interests
+ function removeSkill(skill) {
+     const index = skills.indexOf(skill);
+     if (index > -1) {
+         skills.splice(index, 1);
+         updateSkillsDisplay();
+     }
+ }
+ 
+ function removeInterest(interest) {
+     const index = interests.indexOf(interest);
+     if (index > -1) {
+         interests.splice(index, 1);
+         updateInterestsDisplay();
+     }
+ }
+ </script>
+ {% endblock %} 
