@@ -630,23 +630,39 @@ $(document).ready(function() {
         $('#loading').addClass('show');
         $('#analyzeBtn').prop('disabled', true);
         // Submit analysis
+        console.log('Submitting form data:', formData);
         $.ajax({
             url: '/analyze',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(formData),
+            timeout: 30000, // 30 second timeout
             success: function(response) {
+                console.log('Response received:', response);
                 if (response.success) {
-                    // Redirect to results page
-                    window.location.href = '/results';
+                    console.log('Success! Redirecting to results page...');
+                    // Redirect to results page with multiple fallback methods
+                    try {
+                        window.location.href = '/results';
+                    } catch (e) {
+                        console.log('Primary redirect failed, trying alternative...');
+                        window.location.replace('/results');
+                    }
                 } else {
+                    console.log('Error in response:', response.error);
                     alert('Error: ' + response.error);
                 }
             },
             error: function(xhr, status, error) {
-                alert('Error: ' + error);
+                console.log('AJAX error:', xhr, status, error);
+                if (status === 'timeout') {
+                    alert('Request timed out. Please try again.');
+                } else {
+                    alert('Error: ' + error);
+                }
             },
             complete: function() {
+                console.log('Request completed');
                 $('#loading').removeClass('show');
                 $('#analyzeBtn').prop('disabled', false);
             }
