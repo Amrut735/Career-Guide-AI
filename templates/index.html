@@ -641,6 +641,10 @@ $(document).ready(function() {
                 console.log('Response received:', response);
                 if (response.success) {
                     console.log('Success! Redirecting to results page...');
+                    // Store a flag in localStorage to indicate successful analysis
+                    localStorage.setItem('analysis_completed', 'true');
+                    localStorage.setItem('analysis_timestamp', Date.now());
+                    
                     // Redirect to results page with multiple fallback methods
                     try {
                         window.location.href = '/results';

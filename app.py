@@ -61,6 +61,9 @@ def analyze():
             'interests': user_profile.interests
         }
         
+        print(f"DEBUG: Stored in session - guidance_text: {len(guidance_text) if guidance_text else 0} chars")
+        print(f"DEBUG: Session keys after storing: {list(session.keys())}")
+        
         return jsonify({
             'success': True,
             'guidance': json_output,
@@ -76,10 +79,17 @@ def analyze():
 @app.route('/results')
 def results():
     """Display results page."""
-    if 'guidance_text' not in session:
-        return redirect('/')
+    print(f"DEBUG: Session keys: {list(session.keys())}")
+    print(f"DEBUG: guidance_text in session: {'guidance_text' in session}")
+    print(f"DEBUG: json_output in session: {'json_output' in session}")
     
-    return render_template('results.html')
+    if 'guidance_text' not in session:
+        print("DEBUG: No guidance_text in session, redirecting to home")
+        # Instead of redirecting, show a message asking user to complete analysis first
+        return render_template('results.html', no_data=True)
+    
+    print("DEBUG: Rendering results page")
+    return render_template('results.html', no_data=False)
 
 @app.route('/download/<format>')
 def download(format):

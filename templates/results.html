@@ -97,6 +97,27 @@
 {% endblock %}
 
 {% block content %}
+{% if no_data %}
+<!-- No Data Message -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center">
+                <h2 class="gradient-text mb-3">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    No Analysis Data Found
+                </h2>
+                <p class="lead">Please complete a career analysis first to view your results.</p>
+                <div class="btn-group" role="group">
+                    <a href="/" class="btn btn-primary">
+                        <i class="fas fa-arrow-left me-2"></i>Start New Analysis
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
 <!-- Results Header -->
 <div class="row mb-4">
     <div class="col-12">
@@ -267,13 +288,27 @@
         </div>
     </div>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block extra_js %}
 <script>
 $(document).ready(function() {
-    // Load results from session
-    loadResults();
+    // Check if analysis was completed recently
+    const analysisCompleted = localStorage.getItem('analysis_completed');
+    const analysisTimestamp = localStorage.getItem('analysis_timestamp');
+    const now = Date.now();
+    
+    // Check if analysis was completed within the last 30 minutes
+    if (analysisCompleted && analysisTimestamp && (now - parseInt(analysisTimestamp)) < 30 * 60 * 1000) {
+        console.log('Analysis completed recently, loading results...');
+        loadResults();
+    } else {
+        console.log('No recent analysis found or analysis expired');
+        // Clear old localStorage data
+        localStorage.removeItem('analysis_completed');
+        localStorage.removeItem('analysis_timestamp');
+    }
 });
 
 function loadResults() {
