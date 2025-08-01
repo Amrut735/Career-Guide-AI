@@ -365,7 +365,7 @@ Sitemap: https://career-guide-ai.onrender.com/sitemap.xml"""
 
 if __name__ == '__main__':
     print("🚀 CareerGuideAI Web Application Starting...")
-    print("📱 Available at: http://127.0.0.1:5000")
-    print("🌐 Also try: http://localhost:5000")
-    print("🌐 Network access: http://10.58.30.179:5000")
-    app.run(debug=True, host='0.0.0.0', port=5000) 
+    print("📱 Available at: http://127.0.0.1:5001")
+    print("🌐 Also try: http://localhost:5001")
+    print("🌐 Network access: http://10.58.30.179:5001")
+    app.run(debug=True, host='0.0.0.0', port=5001) 

@@ -490,82 +490,95 @@
 
 {% block extra_js %}
 <script>
+// Global variables for skills and interests
+let skills = [];
+let interests = [];
+let availableSkills = [];
+
+// Global functions for updating displays
+function updateSkillsDisplay() {
+    const container = $('#skillsContainer');
+    container.empty();
+    skills.forEach(skill => {
+        container.append(`
+            <span class="skill-tag">
+                ${skill}
+                <i class="fas fa-times ms-2" onclick="removeSkill('${skill}')"></i>
+            </span>
+        `);
+    });
+}
+
+function updateInterestsDisplay() {
+    const container = $('#interestsContainer');
+    container.empty();
+    interests.forEach(interest => {
+        container.append(`
+            <span class="skill-tag">
+                ${interest}
+                <i class="fas fa-times ms-2" onclick="removeInterest('${interest}')"></i>
+            </span>
+        `);
+    });
+}
+
+// Global function for adding skills
+function addSkill(skill) {
+    if (skill && !skills.includes(skill)) {
+        skills.push(skill);
+        updateSkillsDisplay();
+        $('#skillInput').val('');
+    }
+}
+
+// Global function for adding interests
+function addInterest(interest) {
+    if (interest && !interests.includes(interest)) {
+        interests.push(interest);
+        updateInterestsDisplay();
+        $('#interestInput').val('');
+    }
+}
+
 $(document).ready(function() {
-    let skills = [];
-    let interests = [];
-    let availableSkills = [];
 
     // Load available skills for autocomplete
     $.get('/api/skills', function(data) {
         availableSkills = data;
     });
 
-    // Add skill functionality
-    function addSkill(skill) {
-        if (skill && !skills.includes(skill)) {
-            skills.push(skill);
-            updateSkillsDisplay();
-            $('#skillInput').val('');
-        }
+    // Add skill functionality (local wrapper for global function)
+    function addSkillLocal(skill) {
+        addSkill(skill);
     }
 
-    function updateSkillsDisplay() {
-        const container = $('#skillsContainer');
-        container.empty();
-        skills.forEach(skill => {
-            container.append(`
-                <span class="skill-tag">
-                    ${skill}
-                    <i class="fas fa-times ms-2" onclick="removeSkill('${skill}')"></i>
-                </span>
-            `);
-        });
-    }
-
-    // Add interest functionality
-    function addInterest(interest) {
-        if (interest && !interests.includes(interest)) {
-            interests.push(interest);
-            updateInterestsDisplay();
-            $('#interestInput').val('');
-        }
-    }
-
-    function updateInterestsDisplay() {
-        const container = $('#interestsContainer');
-        container.empty();
-        interests.forEach(interest => {
-            container.append(`
-                <span class="skill-tag">
-                    ${interest}
-                    <i class="fas fa-times ms-2" onclick="removeInterest('${interest}')"></i>
-                </span>
-            `);
-        });
+    // Add interest functionality (local wrapper for global function)
+    function addInterestLocal(interest) {
+        addInterest(interest);
     }
 
     // Skill input handling
     $('#skillInput').on('keypress', function(e) {
         if (e.which === 13) {
             e.preventDefault();
-            addSkill($(this).val().trim());
+            addSkillLocal($(this).val().trim());
         }
     });
 
     $('#addSkill').on('click', function() {
-        addSkill($('#skillInput').val().trim());
+        addSkillLocal($('#skillInput').val().trim());
     });
 
     // Interest input handling
     $('#interestInput').on('keypress', function(e) {
         if (e.which === 13) {
             e.preventDefault();
-            addInterest($(this).val().trim());
+            addInterestLocal($(this).val().trim());
         }
     });
 
     $('#addInterest').on('click', function() {
-        addInterest($('#interestInput').val().trim());
+        addInterestLocal($('#interestInput').val().trim());
     });
 
     // Skill autocomplete
