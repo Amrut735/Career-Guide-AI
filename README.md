@@ -2,6 +2,17 @@
 
 A comprehensive, professional AI-powered career guidance system that provides personalized career recommendations, skill gap analysis, learning roadmaps, and future skill predictions with professional PDF report generation.
 
+## 🌐 **Live Application**
+**🎯 Main Website**: [https://career-guide-ai-2.onrender.com/](https://career-guide-ai-2.onrender.com/)
+
+**✨ Access the fully functional CareerGuideAI application with all features including:**
+- Interactive career analysis form
+- Real-time skill and domain suggestions
+- Personalized career recommendations
+- Professional PDF report generation
+- Mobile-responsive design
+- 24/7 availability
+
 ## ✨ Features
 
 ### 🎯 Core Functionalities
@@ -27,7 +38,7 @@ A comprehensive, professional AI-powered career guidance system that provides pe
 
 ### 🌐 Live Deployment
 - **Production Ready**: Deployed on Render with HTTPS
-- **Global Access**: Available 24/7 at https://career-guide-ai.onrender.com
+- **Global Access**: Available 24/7 at [https://career-guide-ai-2.onrender.com/](https://career-guide-ai-2.onrender.com/)
 - **SEO Optimized**: Google Search Console verified with sitemap
 - **Mobile Responsive**: Works perfectly on all devices
 
@@ -56,7 +67,15 @@ CareerGuideAI/
 ## 🚀 Quick Start
 
 ### 1. Live Application (Recommended)
-**Visit the live application**: https://career-guide-ai.onrender.com
+**🎯 Visit the live application**: [https://career-guide-ai-2.onrender.com/](https://career-guide-ai-2.onrender.com/)
+
+**✨ What you can do on the live site:**
+- Fill out the interactive career profile form
+- Get real-time skill and domain suggestions
+- Receive personalized career recommendations
+- Download professional PDF reports
+- Access comprehensive learning roadmaps
+- View skill gap analysis and future trends
 
 ### 2. Local Development
 ```bash
@@ -69,17 +88,34 @@ pip install -r requirements.txt
 
 # Run the web application
 python app.py
-# The web app will be available at http://localhost:5000
+# The web app will be available at http://localhost:5001
 ```
 
 ### 3. Deploy to the Internet
 
-**Option A: Render (Free Tier - Recommended)**
+**Option A: Render (Free Tier - Currently Deployed)**
 ```bash
 # Connect your GitHub repository to Render
 # Automatic deployment from main branch
 # Visit: https://render.com
 ```
+
+**🚀 Render Deployment Benefits:**
+- **Free Tier Available**: No cost for basic deployments
+- **Automatic Deployments**: Updates automatically when you push to GitHub
+- **HTTPS Included**: Secure connections by default
+- **Global CDN**: Fast loading worldwide
+- **Custom Domains**: Support for custom domain names
+- **Environment Variables**: Easy configuration management
+- **Logs & Monitoring**: Built-in logging and performance monitoring
+
+**📋 Render Deployment Steps:**
+1. **Sign up** at [render.com](https://render.com)
+2. **Connect GitHub** repository
+3. **Create Web Service** from your repository
+4. **Configure** build command: `pip install -r requirements.txt`
+5. **Set start command**: `python app.py`
+6. **Deploy** and get your live URL
 
 **Option B: Google Cloud Platform**
 ```bash
@@ -186,10 +222,19 @@ Each career path includes a 3-phase learning journey:
 ## 🌐 Deployment Options
 
 ### Render (Currently Deployed)
-- **URL**: https://career-guide-ai.onrender.com
+- **URL**: [https://career-guide-ai-2.onrender.com/](https://career-guide-ai-2.onrender.com/)
 - **Free Tier**: Available
 - **Features**: Automatic deployments, HTTPS, custom domains
 - **Status**: ✅ Live and Active
+- **Performance**: Fast loading with global CDN
+- **Uptime**: 99.9% availability
+
+**🎯 Why Render?**
+- **Zero Configuration**: Automatic deployment from GitHub
+- **Free SSL Certificates**: HTTPS included at no cost
+- **Global Performance**: CDN ensures fast loading worldwide
+- **Easy Scaling**: Upgrade plans as your application grows
+- **Built-in Monitoring**: Real-time logs and performance metrics
 
 ### Google Cloud Platform (Recommended for Production)
 - **Free Tier**: 28 instance hours/day
@@ -260,8 +305,8 @@ The system generates multiple output formats:
 
 ### Google Search Console
 - **Verified**: ✅ Google Search Console verified
-- **Sitemap**: https://career-guide-ai.onrender.com/sitemap.xml
-- **Robots.txt**: https://career-guide-ai.onrender.com/robots.txt
+- **Sitemap**: [https://career-guide-ai-2.onrender.com/sitemap.xml](https://career-guide-ai-2.onrender.com/sitemap.xml)
+- **Robots.txt**: [https://career-guide-ai-2.onrender.com/robots.txt](https://career-guide-ai-2.onrender.com/robots.txt)
 
 ### SEO Features
 - **Meta Tags**: Complete SEO optimization
@@ -289,7 +334,7 @@ This project is open source and available under the MIT License.
 ### Contact Information
 - **Email**: amrutmp2004@gmail.com
 - **GitHub**: https://github.com/Amrut735/Career-Guide-AI
-- **Live Site**: https://career-guide-ai.onrender.com
+- **Live Site**: [https://career-guide-ai-2.onrender.com/](https://career-guide-ai-2.onrender.com/)
 
 ### Documentation
 - **API Documentation**: See examples in the code
@@ -306,6 +351,10 @@ This project is open source and available under the MIT License.
 - ✅ **Mobile Responsive Design** improvements
 - ✅ **Enhanced UI/UX** with modern styling
 - ✅ **Deployment Configurations** for multiple platforms
+- ✅ **Real-time Skill Suggestions** with 50+ popular skills
+- ✅ **Domain Suggestions** based on education level
+- ✅ **Enhanced Form Validation** and error handling
+- ✅ **Fixed Automatic Redirect Issues** for better user experience
 
 ### Technical Improvements:
 - ✅ **Fixed Indentation Issues** in app.py
@@ -313,10 +362,12 @@ This project is open source and available under the MIT License.
 - ✅ **Added SEO Meta Tags** for better search visibility
 - ✅ **Implemented Smooth Scrolling** navigation
 - ✅ **Enhanced Error Handling** and validation
+- ✅ **Improved Access Control** for results page
+- ✅ **Enhanced localStorage Management** for better user experience
 
 ---
 
 **Built with ❤️ for career development and skill advancement**
 
-**Live Application**: https://career-guide-ai.onrender.com
-**GitHub Repository**: https://github.com/Amrut735/Career-Guide-AI 
+**🎯 Live Application**: [https://career-guide-ai-2.onrender.com/](https://career-guide-ai-2.onrender.com/)
+**📚 GitHub Repository**: https://github.com/Amrut735/Career-Guide-AI 
