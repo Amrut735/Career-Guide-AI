@@ -645,13 +645,9 @@ $(document).ready(function() {
                     localStorage.setItem('analysis_completed', 'true');
                     localStorage.setItem('analysis_timestamp', Date.now());
                     
-                    // Redirect to results page with multiple fallback methods
-                    try {
-                        window.location.href = '/results';
-                    } catch (e) {
-                        console.log('Primary redirect failed, trying alternative...');
-                        window.location.replace('/results');
-                    }
+                    // Force a hard redirect to results page
+                    console.log('Initiating redirect to /results...');
+                    window.location.replace('/results');
                 } else {
                     console.log('Error in response:', response.error);
                     alert('Error: ' + response.error);
@@ -665,13 +661,22 @@ $(document).ready(function() {
                     alert('Error: ' + error);
                 }
             },
-            complete: function() {
+                        complete: function() {
                 console.log('Request completed');
                 $('#loading').removeClass('show');
                 $('#analyzeBtn').prop('disabled', false);
             }
         });
     });
+    
+    // Add a fallback redirect mechanism
+    setTimeout(function() {
+        if (localStorage.getItem('analysis_completed') === 'true') {
+            console.log('Fallback: Redirecting to results page...');
+            window.location.replace('/results');
+        }
+    }, 5000); // 5 second fallback
+});
 });
 
 // Smooth scrolling for navigation links

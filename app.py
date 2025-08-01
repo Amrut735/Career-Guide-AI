@@ -373,6 +373,20 @@ Allow: /
 Sitemap: https://career-guide-ai.onrender.com/sitemap.xml"""
     return app.response_class(robots_content, mimetype='text/plain')
 
+@app.route('/debug')
+def debug():
+    """Debug page for troubleshooting."""
+    return render_template('debug.html')
+
+@app.route('/api/debug/session')
+def debug_session():
+    """API endpoint to get session debug information."""
+    return jsonify({
+        'session_keys': list(session.keys()),
+        'has_guidance': 'guidance_text' in session,
+        'has_json': 'json_output' in session
+    })
+
 if __name__ == '__main__':
     print("🚀 CareerGuideAI Web Application Starting...")
     print("📱 Available at: http://127.0.0.1:5001")

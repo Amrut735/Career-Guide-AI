@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}CareerGuideAI - Debug Page{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-bug me-2"></i>Debug Information</h3>
+                </div>
+                <div class="card-body">
+                    <h5>Session Information:</h5>
+                    <div id="sessionInfo" class="mb-4">
+                        <p><strong>Session Keys:</strong> <span id="sessionKeys">Loading...</span></p>
+                        <p><strong>Has Guidance Text:</strong> <span id="hasGuidance">Loading...</span></p>
+                        <p><strong>Has JSON Output:</strong> <span id="hasJson">Loading...</span></p>
+                    </div>
+                    
+                    <h5>LocalStorage Information:</h5>
+                    <div id="localStorageInfo" class="mb-4">
+                        <p><strong>Analysis Completed:</strong> <span id="analysisCompleted">Loading...</span></p>
+                        <p><strong>Analysis Timestamp:</strong> <span id="analysisTimestamp">Loading...</span></p>
+                    </div>
+                    
+                    <h5>Browser Information:</h5>
+                    <div id="browserInfo" class="mb-4">
+                        <p><strong>User Agent:</strong> <span id="userAgent">Loading...</span></p>
+                        <p><strong>Cookies Enabled:</strong> <span id="cookiesEnabled">Loading...</span></p>
+                        <p><strong>LocalStorage Available:</strong> <span id="localStorageAvailable">Loading...</span></p>
+                    </div>
+                    
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-primary" onclick="refreshDebugInfo()">
+                            <i class="fas fa-refresh me-2"></i>Refresh Debug Info
+                        </button>
+                        <button class="btn btn-success" onclick="testRedirect()">
+                            <i class="fas fa-arrow-right me-2"></i>Test Redirect
+                        </button>
+                        <button class="btn btn-warning" onclick="clearLocalStorage()">
+                            <i class="fas fa-trash me-2"></i>Clear LocalStorage
+                        </button>
+                        <a href="/" class="btn btn-info">
+                            <i class="fas fa-home me-2"></i>Go Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function refreshDebugInfo() {
+    // Session info
+    $.get('/api/debug/session', function(data) {
+        $('#sessionKeys').text(data.session_keys ? data.session_keys.join(', ') : 'None');
+        $('#hasGuidance').text(data.has_guidance ? 'Yes' : 'No');
+        $('#hasJson').text(data.has_json ? 'Yes' : 'No');
+    }).fail(function() {
+        $('#sessionKeys').text('Error loading session info');
+        $('#hasGuidance').text('Error');
+        $('#hasJson').text('Error');
+    });
+    
+    // LocalStorage info
+    const analysisCompleted = localStorage.getItem('analysis_completed');
+    const analysisTimestamp = localStorage.getItem('analysis_timestamp');
+    
+    $('#analysisCompleted').text(analysisCompleted || 'Not set');
+    $('#analysisTimestamp').text(analysisTimestamp ? new Date(parseInt(analysisTimestamp)).toLocaleString() : 'Not set');
+    
+    // Browser info
+    $('#userAgent').text(navigator.userAgent);
+    $('#cookiesEnabled').text(navigator.cookieEnabled ? 'Yes' : 'No');
+    $('#localStorageAvailable').text(typeof(Storage) !== "undefined" ? 'Yes' : 'No');
+}
+
+function testRedirect() {
+    console.log('Testing redirect to /results...');
+    window.location.href = '/results';
+}
+
+function clearLocalStorage() {
+    localStorage.removeItem('analysis_completed');
+    localStorage.removeItem('analysis_timestamp');
+    alert('LocalStorage cleared!');
+    refreshDebugInfo();
+}
+
+$(document).ready(function() {
+    refreshDebugInfo();
+});
+</script>
+{% endblock %} 
