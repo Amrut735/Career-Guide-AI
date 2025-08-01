@@ -240,6 +240,11 @@
                             <i class="fas fa-magic me-2"></i>
                             Analyze My Career Path
                         </button>
+                        <br><br>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="testRedirect()">
+                            <i class="fas fa-test me-2"></i>
+                            Test Redirect
+                        </button>
                     </div>
                 </form>
 
@@ -645,9 +650,27 @@ $(document).ready(function() {
                     localStorage.setItem('analysis_completed', 'true');
                     localStorage.setItem('analysis_timestamp', Date.now());
                     
-                    // Force a hard redirect to results page
+                    // Try multiple redirect methods for better browser compatibility
                     console.log('Initiating redirect to /results...');
-                    window.location.replace('/results');
+                    try {
+                        // Method 1: window.location.replace (most reliable)
+                        window.location.replace('/results');
+                    } catch (e) {
+                        console.log('Method 1 failed, trying Method 2...');
+                        try {
+                            // Method 2: window.location.href
+                            window.location.href = '/results';
+                        } catch (e2) {
+                            console.log('Method 2 failed, trying Method 3...');
+                            // Method 3: Create and click a link
+                            const link = document.createElement('a');
+                            link.href = '/results';
+                            link.style.display = 'none';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }
+                    }
                 } else {
                     console.log('Error in response:', response.error);
                     alert('Error: ' + response.error);
@@ -669,13 +692,38 @@ $(document).ready(function() {
         });
     });
     
-    // Add a fallback redirect mechanism
-    setTimeout(function() {
+    // Add multiple fallback redirect mechanisms
+    let redirectAttempts = 0;
+    const maxRedirectAttempts = 3;
+    
+    function attemptRedirect() {
+        redirectAttempts++;
+        console.log(`Fallback redirect attempt ${redirectAttempts}/${maxRedirectAttempts}`);
+        
         if (localStorage.getItem('analysis_completed') === 'true') {
-            console.log('Fallback: Redirecting to results page...');
-            window.location.replace('/results');
+            try {
+                window.location.replace('/results');
+            } catch (e) {
+                console.log('Fallback redirect failed:', e);
+                if (redirectAttempts < maxRedirectAttempts) {
+                    setTimeout(attemptRedirect, 2000); // Try again in 2 seconds
+                } else {
+                    console.log('All redirect attempts failed, showing manual link');
+                    // Show a manual link if all redirects fail
+                    $('#loading').html(`
+                        <div class="alert alert-success">
+                            <h4>Analysis Complete!</h4>
+                            <p>Your career analysis has been completed successfully.</p>
+                            <a href="/results" class="btn btn-primary">View Results</a>
+                        </div>
+                    `);
+                }
+            }
         }
-    }, 5000); // 5 second fallback
+    }
+    
+    // Start fallback mechanism after 3 seconds
+    setTimeout(attemptRedirect, 3000);
 });
 });
 
@@ -706,6 +754,17 @@ function removeInterest(interest) {
     if (index > -1) {
         interests.splice(index, 1);
         updateInterestsDisplay();
+    }
+}
+
+// Test redirect function
+function testRedirect() {
+    console.log('Testing redirect to /results...');
+    try {
+        window.location.href = '/results';
+    } catch (e) {
+        console.log('Test redirect failed:', e);
+        alert('Redirect test failed. Check console for details.');
     }
 }
 </script>
