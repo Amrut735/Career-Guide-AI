@@ -329,7 +329,6 @@ To enhance the system:
 
 This project is open source and available under the MIT License.
 
-## 🆘 Support
 
 ### Contact Information
 - **Email**: amrutmp2004@gmail.com
@@ -341,29 +340,10 @@ This project is open source and available under the MIT License.
 - **Deployment Guide**: `DEPLOYMENT_GUIDE.md`
 - **Troubleshooting**: Check GitHub Issues
 
-## 🚀 Recent Updates
+🤝 Contributing
+Feel free to fork this project and submit pull requests for improvements!
 
-### Latest Features Added:
-- ✅ **Professional PDF Reports** with comprehensive formatting
-- ✅ **About & Contact Sections** with smooth scrolling navigation
-- ✅ **Google Search Console Integration** for SEO
-- ✅ **Sitemap & Robots.txt** for better indexing
-- ✅ **Mobile Responsive Design** improvements
-- ✅ **Enhanced UI/UX** with modern styling
-- ✅ **Deployment Configurations** for multiple platforms
-- ✅ **Real-time Skill Suggestions** with 50+ popular skills
-- ✅ **Domain Suggestions** based on education level
-- ✅ **Enhanced Form Validation** and error handling
-- ✅ **Fixed Automatic Redirect Issues** for better user experience
 
-### Technical Improvements:
-- ✅ **Fixed Indentation Issues** in app.py
-- ✅ **Optimized PDF Generation** with ReportLab
-- ✅ **Added SEO Meta Tags** for better search visibility
-- ✅ **Implemented Smooth Scrolling** navigation
-- ✅ **Enhanced Error Handling** and validation
-- ✅ **Improved Access Control** for results page
-- ✅ **Enhanced localStorage Management** for better user experience
 
 ---
 
