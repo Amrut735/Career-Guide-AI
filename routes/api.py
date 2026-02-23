@@ -25,7 +25,12 @@ def analyze():
         )
 
     cache_key = build_cache_key(payload)
-    cached = cache.get(cache_key)
+    cached = None
+    try:
+        cached = cache.get(cache_key)
+    except Exception:
+        cached = None
+
     if cached:
         guidance_text = cached["guidance_text"]
         json_output = cached["json_output"]
@@ -33,16 +38,19 @@ def analyze():
         timestamp = cached["timestamp"]
     else:
         guidance_text, json_output, user_profile, timestamp = analyze_profile(payload)
-        cache.set(
-            cache_key,
-            {
-                "guidance_text": guidance_text,
-                "json_output": json_output,
-                "user_profile": user_profile,
-                "timestamp": timestamp,
-            },
-            timeout=3600,
-        )
+        try:
+            cache.set(
+                cache_key,
+                {
+                    "guidance_text": guidance_text,
+                    "json_output": json_output,
+                    "user_profile": user_profile,
+                    "timestamp": timestamp,
+                },
+                timeout=3600,
+            )
+        except Exception:
+            pass
 
     session["guidance_text"] = guidance_text
     session["json_output"] = json_output
