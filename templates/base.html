@@ -151,6 +151,7 @@
         
         .loading {
             display: none;
+            min-height: 220px;
         }
         
         .loading.show {
@@ -160,6 +161,40 @@
         .spinner-border {
             width: 3rem;
             height: 3rem;
+        }
+
+        .skeleton-report {
+            display: grid;
+            gap: 12px;
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 37%, #f1f5f9 63%);
+            background-size: 400% 100%;
+            border-radius: 10px;
+            animation: skeletonPulse 1.6s ease-in-out infinite;
+        }
+
+        .skeleton-title {
+            height: 24px;
+            width: 70%;
+            margin: 0 auto;
+        }
+
+        .skeleton-line {
+            height: 14px;
+            width: 100%;
+        }
+
+        .skeleton-card {
+            height: 80px;
+            width: 100%;
+            border-radius: 16px;
+        }
+
+        @keyframes skeletonPulse {
+            0% { background-position: 100% 0; }
+            100% { background-position: 0 0; }
         }
         
         .fade-in {
@@ -208,6 +243,41 @@
             margin-bottom: 2rem;
             border: 2px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 1.5rem;
+            }
+
+            .card-body {
+                padding: 1.25rem;
+            }
+
+            .btn-lg {
+                width: 100%;
+            }
+
+            .btn-group {
+                width: 100%;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .btn-group .btn {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .fade-in,
+            .career-card,
+            .skill-tag,
+            .btn-primary,
+            .stat-card {
+                animation: none !important;
+                transition: none !important;
+            }
         }
         
         .feature-icon {

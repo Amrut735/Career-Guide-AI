@@ -6,6 +6,15 @@ Flask>=2.3.0
 Werkzeug>=2.3.0
 gunicorn
 reportlab
+python-dotenv
+Flask-Limiter
+pydantic>=2.0
+Flask-SQLAlchemy
+Flask-Login
+Flask-Caching
+celery
+redis
+psycopg2-binary
 
 # Optional dependencies for enhanced functionality (uncomment if needed):
 # requests>=2.28.0  # For API integrations
