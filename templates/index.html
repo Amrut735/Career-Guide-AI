@@ -741,6 +741,8 @@ $(document).ready(function() {
         localStorage.removeItem('analysis_completed');
         localStorage.removeItem('analysis_timestamp');
         
+        let didSucceed = false;
+
         // Simple AJAX request
         $.ajax({
             url: '/analyze',
@@ -752,6 +754,7 @@ $(document).ready(function() {
                 console.log('Success response:', response);
                 
                 if (response.success) {
+                    didSucceed = true;
                     // Store in localStorage
                     localStorage.setItem('analysis_completed', 'true');
                     localStorage.setItem('analysis_timestamp', Date.now());
@@ -778,7 +781,11 @@ $(document).ready(function() {
                 showError('Request failed. Please try again.');
             },
             complete: function() {
-                $('#loading').removeClass('show');
+                if (didSucceed) {
+                    $('#loading').removeClass('show');
+                } else {
+                    $('#loading').addClass('show');
+                }
                 $('#analyzeBtn').prop('disabled', false);
                 $('#analyzeBtn').html('<i class="fas fa-magic me-2"></i>Analyze My Career Path');
             }
